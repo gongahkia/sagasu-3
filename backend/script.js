@@ -1,41 +1,59 @@
 const { chromium } = require('playwright');
 
 (async () => {
-  const browser = await chromium.launch({ headless: false }); // set true for headless automation
-  const page = await browser.newPage();
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
-  // 1. Go to the target page
+  // 1. Go to the initial site
   await page.goto('https://www.smubondue.com/facility-booking-system-fbs', { waitUntil: 'networkidle' });
 
-  // 2. Find the anchor and click it, then wait for navigation
-  const smuFBSLink = await page.waitForSelector('a[aria-label="SMU FBS"]');
-  const [newPageUrl] = await Promise.all([
-    // Wait for the URL to change or any navigation to complete (update regex as needed)
-    page.waitForURL(url => url !== 'https://www.smubondue.com/facility-booking-system-fbs', { timeout: 10000 }),
-    smuFBSLink.click()
+  // 2. Prepare to watch for the new tab (Microsoft login)
+  const [newPage] = await Promise.all([
+    context.waitForEvent('page', { timeout: 30000 }), // Wait up to 30s for popup
+    page.click('a[aria-label="SMU FBS"]'),
   ]);
 
-  // Optionally: add a wait for DOM/content to settle
-  await page.waitForLoadState('networkidle');
+  // 3. Wait for the Microsoft login URL to load
+  await newPage.waitForURL(/login\.microsoftonline\.com/, { timeout: 30000 });
 
-  // Screenshot after SMU FBS click
-  await page.screenshot({ path: 'after_smu_fbs_click.png', fullPage: true });
+  // (Optional, but recommended): wait explicitly for the Microsoft email input field (very robust!)
+  await newPage.waitForSelector('input[type="email"], #i0116', { timeout: 30000 });
 
-  // 3. Find the input and enter email
-  const placeholderInput = await page.waitForSelector('div.placeholderContainer input', { timeout: 10000 });
-  await placeholderInput.fill('gabriel.ong.2023@scis.smu.edu.sg');
+  // 4. Screenshot after the SSO login page is fully ready
+  await newPage.screenshot({ path: 'after_smu_fbs_click.png', fullPage: true });
 
-  // 4. Find and click the login button, wait for navigation
-  const buttonInput = await page.waitForSelector('div.inline-block.button-item.ext-button-item input', { timeout: 10000 });
+  // 5. Fill in the Microsoft login email (try both possible selectors)
+  // Try input[type="email"]
+  let emailInput = await newPage.$('input[type="email"]');
+  if (!emailInput) {
+    // Try alternate Microsoft selector
+    emailInput = await newPage.$('#i0116');
+  }
+  if (!emailInput) {
+    throw new Error('Email input not found on Microsoft login page');
+  }
+  await emailInput.fill('gabriel.ong.2023@scis.smu.edu.sg');
+
+  // 6. Click the "Next" or login button, wait for redirect (adjust selector as needed)
+  let nextButton = await newPage.$('input[type="submit"], button[type="submit"]');
+  if (!nextButton) {
+    // Try another possible Microsoft selector
+    nextButton = await newPage.$('#idSIButton9');
+  }
+  if (!nextButton) {
+    throw new Error('Login/Next button not found on Microsoft login page');
+  }
   await Promise.all([
-    // Wait for URL to change. Adjust the regex if you know the expected pattern.
-    page.waitForURL(url => url !== page.url(), { timeout: 10000 }),
-    buttonInput.click()
+    newPage.waitForNavigation({ waitUntil: 'load', timeout: 30000 }).catch(() => {}), // Optional, may fail on AJAX
+    newPage.waitForLoadState('networkidle'),
+    nextButton.click()
   ]);
-  await page.waitForLoadState('networkidle');
 
-  // Screenshot after login click
-  await page.screenshot({ path: 'after_login_click.png', fullPage: true });
+  // 7. Final screenshot after login attempt
+  await newPage.screenshot({ path: 'after_login_click.png', fullPage: true });
+  await newPage.pause();
+  
 
   await browser.close();
 })();
