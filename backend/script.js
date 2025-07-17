@@ -1,4 +1,12 @@
 const { chromium } = require('playwright');
+require('dotenv').config(); // load .env
+
+const EMAIL = process.env.SMU_EMAIL;
+const PASSWORD = process.env.SMU_PASSWORD;
+
+if (!EMAIL || !PASSWORD) {
+  throw new Error('Missing SMU_EMAIL or SMU_PASSWORD in .env');
+}
 
 (async () => {
   const browser = await chromium.launch({ headless: false });
@@ -8,52 +16,47 @@ const { chromium } = require('playwright');
   // 1. Go to the initial site
   await page.goto('https://www.smubondue.com/facility-booking-system-fbs', { waitUntil: 'networkidle' });
 
-  // 2. Prepare to watch for the new tab (Microsoft login)
+  // 2. Open Microsoft login in new tab
   const [newPage] = await Promise.all([
-    context.waitForEvent('page', { timeout: 30000 }), // Wait up to 30s for popup
+    context.waitForEvent('page', { timeout: 30000 }),
     page.click('a[aria-label="SMU FBS"]'),
   ]);
 
-  // 3. Wait for the Microsoft login URL to load
+  // 3. Wait for Microsoft login URL to appear
   await newPage.waitForURL(/login\.microsoftonline\.com/, { timeout: 30000 });
-
-  // (Optional, but recommended): wait explicitly for the Microsoft email input field (very robust!)
   await newPage.waitForSelector('input[type="email"], #i0116', { timeout: 30000 });
 
-  // 4. Screenshot after the SSO login page is fully ready
-  await newPage.screenshot({ path: 'after_smu_fbs_click.png', fullPage: true });
+  // 4. Fill email and proceed
+  let emailInput = await newPage.$('input[type="email"]') || await newPage.$('#i0116');
+  if (!emailInput) throw new Error('Email input not found');
+  await emailInput.fill(EMAIL);
 
-  // 5. Fill in the Microsoft login email (try both possible selectors)
-  // Try input[type="email"]
-  let emailInput = await newPage.$('input[type="email"]');
-  if (!emailInput) {
-    // Try alternate Microsoft selector
-    emailInput = await newPage.$('#i0116');
-  }
-  if (!emailInput) {
-    throw new Error('Email input not found on Microsoft login page');
-  }
-  await emailInput.fill('gabriel.ong.2023@scis.smu.edu.sg');
-
-  // 6. Click the "Next" or login button, wait for redirect (adjust selector as needed)
-  let nextButton = await newPage.$('input[type="submit"], button[type="submit"]');
-  if (!nextButton) {
-    // Try another possible Microsoft selector
-    nextButton = await newPage.$('#idSIButton9');
-  }
-  if (!nextButton) {
-    throw new Error('Login/Next button not found on Microsoft login page');
-  }
+  let nextButton = await newPage.$('input[type="submit"]') || await newPage.$('button[type="submit"]') || await newPage.$('#idSIButton9');
+  if (!nextButton) throw new Error('Next button not found');
   await Promise.all([
-    newPage.waitForNavigation({ waitUntil: 'load', timeout: 30000 }).catch(() => {}), // Optional, may fail on AJAX
+    nextButton.click(),
     newPage.waitForLoadState('networkidle'),
-    nextButton.click()
   ]);
 
-  // 7. Final screenshot after login attempt
-  await newPage.screenshot({ path: 'after_login_click.png', fullPage: true });
-  await newPage.pause();
-  
+  // 5. Wait for redirect or transition to SMU login
+  await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
 
+  // 6. Wait for password input, fill in password
+  await newPage.waitForSelector('input#passwordInput', { timeout: 30000 });
+  const passwordInput = await newPage.$('input#passwordInput');
+  if (!passwordInput) throw new Error('Password input not found');
+  await passwordInput.fill(PASSWORD);
+
+  // 7. Find and click the submit button
+  await newPage.waitForSelector('div#submissionArea span#submitButton', { timeout: 30000 });
+  const submitButton = await newPage.$('div#submissionArea span#submitButton');
+  if (!submitButton) throw new Error('Submit button not found');
+  await Promise.all([
+    submitButton.click(),
+    newPage.waitForLoadState('networkidle')
+  ]);
+
+  await newPage.screenshot({ path: 'after_smu_login2_login_debug.png', fullPage: true });
+  await newPage.pause();
   await browser.close();
 })();
