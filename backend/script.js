@@ -1,10 +1,12 @@
 const { chromium } = require('playwright');
 require('dotenv').config(); 
 
+// constant definition
+
 const EMAIL = process.env.SMU_EMAIL;
 const PASSWORD = process.env.SMU_PASSWORD;
-
 const url = "https://www.smubondue.com/facility-booking-system-fbs";
+const screenshot_dir = './screenshot';
 
 if (!EMAIL || !PASSWORD) {
   throw new Error('ERROR: Missing SMU_EMAIL or SMU_PASSWORD in .env');
@@ -81,7 +83,7 @@ if (!EMAIL || !PASSWORD) {
 
   // 8. Wait for dashboard and validate correct site
   await newPage.waitForURL(/https:\/\/fbs\.intranet\.smu\.edu\.sg\//, { timeout: 30000 });
-  await newPage.screenshot({ path: 'after_smu_login2_login_debug.png', fullPage: true });
+  await newPage.screenshot({ path: `${screenshot_dir}/after_smu_login2_login_debug.png`, fullPage: true });
   console.log(`LOG: Arrived at dashboard at url ${newPage.url()} and saved screenshot`);
 
   // await newPage.pause(); // debug
