@@ -110,8 +110,8 @@ const SCRAPE_CONFIG = {
   // ---- SCRAPING & FILTERING ---- //
 
   // Wait for content frame to load
-  await fbsPage.waitForSelector('iframe[name="frameContent"]', { timeout: 20000 });
-  const frame = await fbsPage.frameLocator('iframe[name="frameContent"]');
+  await fbsPage.waitForSelector('iframe#frameBottom iframe#frameContent', { timeout: 20000 });
+  const frame = await fbsPage.frameLocator('iframe#frameBottom iframe#frameContent');
   console.log(`LOG: Content frame loaded`);
 
   // 3. Wait for and set the date picker
