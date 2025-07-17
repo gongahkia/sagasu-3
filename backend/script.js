@@ -4,17 +4,21 @@ require('dotenv').config();
 const EMAIL = process.env.SMU_EMAIL;
 const PASSWORD = process.env.SMU_PASSWORD;
 
+const url = "https://www.smubondue.com/facility-booking-system-fbs";
+
 if (!EMAIL || !PASSWORD) {
   throw new Error('Missing SMU_EMAIL or SMU_PASSWORD in .env');
 }
 
 (async () => {
+
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
 
   // 1. Go to the initial site
-  await page.goto('https://www.smubondue.com/facility-booking-system-fbs', { waitUntil: 'networkidle' });
+  await page.goto(url, { waitUntil: 'networkidle' });
+  console.log(`LOG: Navigating to ${url}`);
 
   // 2. Open Microsoft login in new tab
   const [newPage] = await Promise.all([
@@ -25,6 +29,7 @@ if (!EMAIL || !PASSWORD) {
   // 3. Wait for Microsoft login URL to appear
   await newPage.waitForURL(/login\.microsoftonline\.com/, { timeout: 30000 });
   await newPage.waitForSelector('input[type="email"], #i0116', { timeout: 30000 });
+  console.log(`LOG: Navigating to ${newPage.url()}`);
 
   // 4. Fill email and proceed
   let emailInput = await newPage.$('input[type="email"]') || await newPage.$('#i0116');
@@ -36,9 +41,9 @@ if (!EMAIL || !PASSWORD) {
     nextButton.click(),
     newPage.waitForLoadState('networkidle'),
   ]);
+  console.log(`LOG: Filled in email ${EMAIL} and clicked next`);
 
   // 5. Wait for SMU redirect or click fallback
-
   let redirected = false;
   try {
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 10000 });
@@ -55,12 +60,14 @@ if (!EMAIL || !PASSWORD) {
     }
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
   }
+  console.log(`LOG: Navigated to ${newPage.url()}`);
 
   // 6. Wait for password input, fill in password
   await newPage.waitForSelector('input#passwordInput', { timeout: 30000 });
   const passwordInput = await newPage.$('input#passwordInput');
   if (!passwordInput) throw new Error('Password input not found');
   await passwordInput.fill(PASSWORD);
+  console.log(`LOG: Filled in password ${PASSWORD}`);
 
   // 7. Find and click the submit button
   await newPage.waitForSelector('div#submissionArea span#submitButton', { timeout: 30000 });
@@ -70,8 +77,13 @@ if (!EMAIL || !PASSWORD) {
     submitButton.click(),
     newPage.waitForLoadState('networkidle')
   ]);
+  console.log(`LOG: Clicked submit button`);
 
   await newPage.screenshot({ path: 'after_smu_login2_login_debug.png', fullPage: true });
-  await newPage.pause();
+  console.log('LOG: Arrived at dashboard and saved screenshot');
+
+  await newPage.pause(); // debug
+
   await browser.close();
+
 })();
