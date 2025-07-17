@@ -1,11 +1,3 @@
-# `Sagasu 3`
-
-The long awaited
-
-Also see [Sagasu]() and [Sagasu 2]().
-
-...
-
 ## To do
 
 * continue writing and iterating and testing scraper from sagasu 2 and sagasu 3, make it read from .env for now (then github secrets later)
@@ -16,3 +8,36 @@ Also see [Sagasu]() and [Sagasu 2]().
 * see whether this can be deployed also as a telegram app
 * then furnish this README.md as required
 * see whether i can apply booking functionality as an extension of this
+
+[![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
+
+# `Sagasu 3`
+
+<p align="center">
+    <img src="./asset/logo/three_logo.png" width=55% height=55%>
+</p>
+
+`Sagasu 3` is provided as 
+
+## Rationale
+
+...
+
+## Stack
+
+...
+
+## Architecture
+
+...
+
+## Usage
+
+...
+
+## Other notes
+
+Also see the following.
+
+* [Sagasu](https://github.com/gongahkia/sagasu)
+* [Sagasu 2](https://github.com/gongahkia/sagasu-2)
