@@ -1,9 +1,22 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
+require('dotenv').config();
 
-const CONFIG = {
-  storageState: './state.json', // Must be generated during your login automation
-  targetUrl: 'https://fbs.intranet.smu.edu.sg/home',
+//
+// --- CONFIGURATION ---
+//
+
+const EMAIL = process.env.SMU_EMAIL;
+const PASSWORD = process.env.SMU_PASSWORD;
+
+if (!EMAIL || !PASSWORD)
+  throw new Error('ERROR: Missing SMU_EMAIL or SMU_PASSWORD in .env');
+
+const url = "https://www.smubondue.com/facility-booking-system-fbs";
+const screenshotDir = './screenshot_log/';
+const outputLog = './booking_log/scraped_log.json';
+
+const SCRAPE_CONFIG = {
   date: '18-Jul-2025', // DD-MMM-YYYY
   startTime: '12:00',   // HH:MM in 24h
   endTime: '16:00',     // HH:MM in 24h
@@ -11,77 +24,148 @@ const CONFIG = {
   buildingNames: ['School of Accountancy'],
   floorNames: ['Level 5'],
   facilityTypes: ['Group Study Room'],
-  equipment: ['Projector'],
-  screenshotDir: './screenshot_log/',
-  outputLog: './booking_log/scraped_log.json'
+  equipment: ['Projector']
 };
+
+//
+// --- MAIN SCRIPT ---
+//
 
 (async () => {
   const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext({
-    storageState: CONFIG.storageState,
-  });
+  const context = await browser.newContext();
   const page = await context.newPage();
 
-  // 1. Go to the FBS system
-  await page.goto(CONFIG.targetUrl, { waitUntil: 'networkidle' });
+  // 1. Go to the initial site
+  await page.goto(url, { waitUntil: 'networkidle' });
+  console.log(`LOG: Navigating to ${url}`);
 
-  // 2. Wait for content frame to load
-  const frame = await page.frameLocator('iframe[name="frameContent"]');
+  // 2. Open Microsoft login in new tab
+  const [newPage] = await Promise.all([
+    context.waitForEvent('page', { timeout: 30000 }),
+    page.click('a[aria-label="SMU FBS"]'),
+  ]);
+
+  // 3. Wait for Microsoft login URL to appear
+  await newPage.waitForURL(/login\.microsoftonline\.com/, { timeout: 30000 });
+  await newPage.waitForSelector('input[type="email"], #i0116', { timeout: 30000 });
+  console.log(`LOG: Navigating to ${newPage.url()}`);
+
+  // 4. Fill email and proceed
+  let emailInput = await newPage.$('input[type="email"]') || await newPage.$('#i0116');
+  if (!emailInput) throw new Error('ERROR: Email input not found');
+  await emailInput.fill(EMAIL);
+  let nextButton = await newPage.$('input[type="submit"]') || await newPage.$('button[type="submit"]') || await newPage.$('#idSIButton9');
+  if (!nextButton) throw new Error('ERROR: Next button not found');
+  await Promise.all([
+    nextButton.click(),
+    newPage.waitForLoadState('networkidle'),
+  ]);
+  console.log(`LOG: Filled in email ${EMAIL} and clicked next`);
+
+  // 5. Wait for SMU redirect or click fallback
+  try {
+    await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 10000 });
+    console.log('LOG: Redirected to SMU SSO');
+  } catch (e) {
+    const redirectLink = await newPage.$('a#redirectTopLink');
+    if (redirectLink) {
+      console.log('Redirect took too long, clicking #redirectTopLink...');
+      await Promise.all([
+        redirectLink.click(),
+      ]);
+    } else {
+      console.log('Redirect delay detected, but #redirectTopLink not found.');
+    }
+    await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
+  }
+  console.log(`LOG: Navigated to ${newPage.url()}`);
+
+  // 6. Wait for password input, fill in password
+  await newPage.waitForSelector('input#passwordInput', { timeout: 30000 });
+  const passwordInput = await newPage.$('input#passwordInput');
+  if (!passwordInput) throw new Error('ERROR: Password input not found');
+  await passwordInput.fill(PASSWORD);
+  console.log(`LOG: Filled in password`);
+
+  // 7. Find and click the submit button
+  await newPage.waitForSelector('div#submissionArea span#submitButton', { timeout: 30000 });
+  const submitButton = await newPage.$('div#submissionArea span#submitButton');
+  if (!submitButton) throw new Error('ERROR: Submit button not found');
+  await Promise.all([
+    submitButton.click(),
+    newPage.waitForLoadState('networkidle')
+  ]);
+  console.log(`LOG: Clicked submit button`);
+
+  // 8. Wait for dashboard and validate correct site
+  await newPage.waitForURL(/https:\/\/fbs\.intranet\.smu\.edu\.sg\//, { timeout: 30000 });
+
+  const finalUrl = newPage.url();
+  const fbsPage = newPage;
+  fs.mkdirSync(screenshotDir, { recursive: true });
+  await fbsPage.screenshot({ path: `${screenshotDir}/after_smu_login2_login_debug.png`, fullPage: true });
+  console.log(`LOG: Arrived at dashboard at url ${finalUrl} and saved screenshot`);
+
+  // ---- SCRAPING & FILTERING ---- //
+
+  // Wait for content frame to load
+  await fbsPage.waitForSelector('iframe[name="frameContent"]', { timeout: 20000 });
+  const frame = await fbsPage.frameLocator('iframe[name="frameContent"]');
 
   // 3. Wait for and set the date picker
   await frame.locator('input#DateBookingFrom_c1_textDate').waitFor({ timeout: 20000 });
-  await frame.locator('input#DateBookingFrom_c1_textDate').fill(CONFIG.date);
+  await frame.locator('input#DateBookingFrom_c1_textDate').fill(SCRAPE_CONFIG.date);
 
   // 4. Set start and end time dropdowns
-  await frame.locator('select#TimeFrom_c1_ctl04').selectOption({ value: CONFIG.startTime });
-  await frame.locator('select#TimeTo_c1_ctl04').selectOption({ value: CONFIG.endTime });
+  await frame.locator('select#TimeFrom_c1_ctl04').selectOption({ value: SCRAPE_CONFIG.startTime });
+  await frame.locator('select#TimeTo_c1_ctl04').selectOption({ value: SCRAPE_CONFIG.endTime });
 
   // 5. Set building(s)
-  if (CONFIG.buildingNames?.length) {
+  if (SCRAPE_CONFIG.buildingNames?.length) {
     await frame.locator('#DropMultiBuildingList_c1_textItem').click();
-    for (const building of CONFIG.buildingNames) {
+    for (const building of SCRAPE_CONFIG.buildingNames) {
       await frame.locator(`text="${building}"`).click();
     }
-    await page.keyboard.press('Escape');
+    await fbsPage.keyboard.press('Escape');
   }
 
   // 6. Set floor(s)
-  if (CONFIG.floorNames?.length) {
+  if (SCRAPE_CONFIG.floorNames?.length) {
     await frame.locator('#DropMultiFloorList_c1_textItem').click();
-    for (const floor of CONFIG.floorNames) {
+    for (const floor of SCRAPE_CONFIG.floorNames) {
       await frame.locator(`text="${floor}"`).click();
     }
-    await page.keyboard.press('Escape');
+    await fbsPage.keyboard.press('Escape');
   }
 
   // 7. Set facility type(s)
-  if (CONFIG.facilityTypes?.length) {
+  if (SCRAPE_CONFIG.facilityTypes?.length) {
     await frame.locator('#DropMultiFacilityTypeList_c1_textItem').click();
-    for (const facType of CONFIG.facilityTypes) {
+    for (const facType of SCRAPE_CONFIG.facilityTypes) {
       await frame.locator(`text="${facType}"`).click();
     }
-    await page.keyboard.press('Escape');
+    await fbsPage.keyboard.press('Escape');
   }
 
   // 8. Set room capacity
-  await frame.locator('select#DropCapacity_c1').selectOption({ value: CONFIG.roomCapacity });
+  await frame.locator('select#DropCapacity_c1').selectOption({ value: SCRAPE_CONFIG.roomCapacity });
 
   // 9. Set equipment (optional)
-  if (CONFIG.equipment?.length) {
+  if (SCRAPE_CONFIG.equipment?.length) {
     await frame.locator('#DropMultiEquipmentList_c1_textItem').click();
-    for (const eq of CONFIG.equipment) {
+    for (const eq of SCRAPE_CONFIG.equipment) {
       await frame.locator(`text="${eq}"`).click();
     }
-    await page.keyboard.press('Escape');
+    await fbsPage.keyboard.press('Escape');
   }
 
   // 10. Click "Check Availability"
   await frame.locator('a#CheckAvailability').click();
-  await page.waitForLoadState('networkidle');
+  await fbsPage.waitForLoadState('networkidle');
 
   // 11. Screenshot results table
-  await page.screenshot({ path: CONFIG.screenshotDir + 'timeslots.png', fullPage: true });
+  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots.png`, fullPage: true });
 
   // 12. Scrape table results (room and timeslot booking state)
   await frame.locator('table#GridResults_gv').waitFor({ timeout: 20000 });
@@ -114,22 +198,23 @@ const CONFIG = {
 
   // 14. Write to log
   const logData = {
-    date: CONFIG.date,
-    start_time: CONFIG.startTime,
-    end_time: CONFIG.endTime,
-    building_names: CONFIG.buildingNames,
-    floor_names: CONFIG.floorNames,
-    facility_types: CONFIG.facilityTypes,
-    equipment: CONFIG.equipment,
+    date: SCRAPE_CONFIG.date,
+    start_time: SCRAPE_CONFIG.startTime,
+    end_time: SCRAPE_CONFIG.endTime,
+    building_names: SCRAPE_CONFIG.buildingNames,
+    floor_names: SCRAPE_CONFIG.floorNames,
+    facility_types: SCRAPE_CONFIG.facilityTypes,
+    equipment: SCRAPE_CONFIG.equipment,
     matched_rooms: matchingRooms,
     timeslots_raw: bookings,
     timestamp: (new Date()).toISOString(),
   };
-  fs.mkdirSync(CONFIG.screenshotDir, { recursive: true });
-  fs.mkdirSync(CONFIG.outputLog.substring(0, CONFIG.outputLog.lastIndexOf('/')), { recursive: true });
-  fs.writeFileSync(CONFIG.outputLog, JSON.stringify(logData, null, 2));
-  console.log('✅ Scraping complete. Data written to:', CONFIG.outputLog);
+  fs.mkdirSync(screenshotDir, { recursive: true });
+  fs.mkdirSync(outputLog.substring(0, outputLog.lastIndexOf('/')), { recursive: true });
+  fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
+  console.log('✅ Scraping complete. Data written to:', outputLog);
 
-  await page.pause(); 
+  await fbsPage.pause(); // Pause for manual inspection; remove/comment for automation
   await browser.close();
+
 })();
