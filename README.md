@@ -1,7 +1,8 @@
 ## To do
 
-* continue writing and iterating and testing scraper from sagasu 2 and sagasu 3, make it read from .env for now (then github secrets later)
 * test and work on `to_test_scraper.js`
+    * debug issue with finding iframe
+    * continue writing and iterating and testing scraper from sagasu 2 and sagasu 3, make it read from .env for now (then github secrets later)
 * ensure can be run and write logs and screenshots as relevant
 * then have it deploy a simple frontend via github pages for me to view
 * look into alternatives to run the scraper whenever i call the frontend but limit number of calls a day on the frontend client side
