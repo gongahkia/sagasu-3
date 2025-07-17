@@ -51,14 +51,14 @@ if (!EMAIL || !PASSWORD) {
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 10000 });
     redirected = true; 
   } catch (e) {
-    const redirectLink = await newPage.$('a#redirectToldpLink');
+    const redirectLink = await newPage.$('a#redirectToIdpLink');
     if (redirectLink) {
-      console.log('Redirect took too long, clicking #redirectToldpLink...');
+      console.log('Redirect took too long, clicking #redirectToIdpLink...');
       await Promise.all([
         redirectLink.click(),
       ]);
     } else {
-      console.log('Redirect delay detected, but #redirectToldpLink not found.');
+      console.log('Redirect delay detected, but #redirectToIdpLink not found.');
     }
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
   }

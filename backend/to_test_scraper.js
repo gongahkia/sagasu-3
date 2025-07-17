@@ -68,14 +68,14 @@ const SCRAPE_CONFIG = {
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 10000 });
     console.log('LOG: Redirected to SMU SSO');
   } catch (e) {
-    const redirectLink = await newPage.$('a#redirectToldpLink');
+    const redirectLink = await newPage.$('a#redirectToIdpLink');
     if (redirectLink) {
-      console.log('Redirect took too long, clicking #redirectToldpLink...');
+      console.log('Redirect took too long, clicking #redirectToIdpLink...');
       await Promise.all([
         redirectLink.click(),
       ]);
     } else {
-      console.log('Redirect delay detected, but #redirectToldpLink not found.');
+      console.log('Redirect delay detected, but #redirectToIdpLink not found.');
     }
     await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
   }
@@ -112,6 +112,7 @@ const SCRAPE_CONFIG = {
   // Wait for content frame to load
   await fbsPage.waitForSelector('iframe[name="frameContent"]', { timeout: 20000 });
   const frame = await fbsPage.frameLocator('iframe[name="frameContent"]');
+  console.log(`LOG: Content frame loaded`);
 
   // 3. Wait for and set the date picker
   await frame.locator('input#DateBookingFrom_c1_textDate').waitFor({ timeout: 20000 });
