@@ -1,5 +1,5 @@
 const { chromium } = require('playwright');
-require('dotenv').config(); // load .env
+require('dotenv').config(); 
 
 const EMAIL = process.env.SMU_EMAIL;
 const PASSWORD = process.env.SMU_PASSWORD;
@@ -30,7 +30,6 @@ if (!EMAIL || !PASSWORD) {
   let emailInput = await newPage.$('input[type="email"]') || await newPage.$('#i0116');
   if (!emailInput) throw new Error('Email input not found');
   await emailInput.fill(EMAIL);
-
   let nextButton = await newPage.$('input[type="submit"]') || await newPage.$('button[type="submit"]') || await newPage.$('#idSIButton9');
   if (!nextButton) throw new Error('Next button not found');
   await Promise.all([
@@ -38,8 +37,24 @@ if (!EMAIL || !PASSWORD) {
     newPage.waitForLoadState('networkidle'),
   ]);
 
-  // 5. Wait for redirect or transition to SMU login
-  await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
+  // 5. Wait for SMU redirect or click fallback
+
+  let redirected = false;
+  try {
+    await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 10000 });
+    redirected = true; 
+  } catch (e) {
+    const redirectLink = await newPage.$('a#redirectTopLink');
+    if (redirectLink) {
+      console.log('Redirect took too long, clicking #redirectTopLink...');
+      await Promise.all([
+        redirectLink.click(),
+      ]);
+    } else {
+      console.log('Redirect delay detected, but #redirectTopLink not found.');
+    }
+    await newPage.waitForURL(/login2\.smu\.edu\.sg/, { timeout: 30000 });
+  }
 
   // 6. Wait for password input, fill in password
   await newPage.waitForSelector('input#passwordInput', { timeout: 30000 });
