@@ -153,7 +153,7 @@ const SCRAPE_CONFIG = {
   // 4. Set start and end time dropdowns
   await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
   await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
-  fbsPage.pause();
+  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
   // --- FUA continue editing from below here
 
