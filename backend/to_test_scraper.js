@@ -128,12 +128,12 @@ const SCRAPE_CONFIG = {
   // --- FUA continue editing from below here
 
   // 3. Wait for and set the date picker
-  await frame.locator('input#DateBookingFrom_c1_textDate').waitFor({ timeout: 20000 });
-  await frame.locator('input#DateBookingFrom_c1_textDate').fill(SCRAPE_CONFIG.date);
+  await frameContent.waitForSelector('input#DateBookingFrom_c1_textDate', { timeout: 20000 });
+  await frameContent.fill('input#DateBookingFrom_c1_textDate', SCRAPE_CONFIG.date);
 
   // 4. Set start and end time dropdowns
-  await frame.locator('select#TimeFrom_c1_ctl04').selectOption({ value: SCRAPE_CONFIG.startTime });
-  await frame.locator('select#TimeTo_c1_ctl04').selectOption({ value: SCRAPE_CONFIG.endTime });
+  await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
+  await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
 
   // 5. Set building(s)
   if (SCRAPE_CONFIG.buildingNames?.length) {
