@@ -17,12 +17,12 @@ const screenshotDir = './screenshot_log/';
 const outputLog = './booking_log/scraped_log.json';
 
 const SCRAPE_CONFIG = {
-  date: '18-Jul-2025', // DD-MMM-YYYY
-  startTime: '12:00',   // HH:MM in 24h
-  endTime: '16:00',     // HH:MM in 24h
+  date: '25-Jul-2025', 
+  startTime: '12:00',   
+  endTime: '16:00',     
   roomCapacity: 'From6To10Pax',
   buildingNames: ['School of Accountancy'],
-  floorNames: ['Level 5'],
+  floorNames: ['Level 1', 'Level 2', 'Level 3'],
   facilityTypes: ['Group Study Room'],
   equipment: ['Projector']
 };
@@ -109,6 +109,7 @@ const SCRAPE_CONFIG = {
 
   // ---- SCRAPING & FILTERING ---- //
 
+  // 1. Switch to core frame
   await fbsPage.waitForSelector('iframe#frameBottom', { timeout: 20000 });
   const frameBottomElement = await fbsPage.$('iframe#frameBottom');
   if (!frameBottomElement) throw new Error('iframe#frameBottom not found');
@@ -116,12 +117,15 @@ const SCRAPE_CONFIG = {
   if (!frameBottom) throw new Error('Frame object for frameBottom not available');
   console.log(`LOG: Content frame bottom loaded`);
 
+  // 2. Switch to core content frame
   await frameBottom.waitForSelector('iframe#frameContent', { timeout: 20000 });
   const frameContentElement = await frameBottom.$('iframe#frameContent');
   if (!frameContentElement) throw new Error('iframe#frameContent not found inside frameBottom');
   const frameContent = await frameContentElement.contentFrame();
   if (!frameContent) throw new Error('Frame object for frameContent not available');
   console.log(`LOG: Core content frame loaded`);
+
+  // --- FUA continue editing from below here
 
   // 3. Wait for and set the date picker
   await frame.locator('input#DateBookingFrom_c1_textDate').waitFor({ timeout: 20000 });
