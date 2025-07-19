@@ -157,8 +157,6 @@ const SCRAPE_CONFIG = {
   console.log(`LOG: Set start and end time dropdowns to ${SCRAPE_CONFIG.startTime} and ${SCRAPE_CONFIG.endTime}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
-  // --- FUA continue editing from below here
-
   // 5. Set building(s)
   if (SCRAPE_CONFIG.buildingNames?.length) {
     await frameContent.locator('#DropMultiBuildingList_c1_textItem').click();
@@ -170,6 +168,8 @@ const SCRAPE_CONFIG = {
   }
   console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
+
+  // --- FUA continue editing from below here
 
   // 6. Set floor(s)
   if (SCRAPE_CONFIG.floorNames?.length) {
