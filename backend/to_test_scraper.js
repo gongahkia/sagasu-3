@@ -109,10 +109,16 @@ const SCRAPE_CONFIG = {
 
   // ---- SCRAPING & FILTERING ---- //
 
+  fbsPage.pause(); // debug pause
+
   // Wait for content frame to load
-  await fbsPage.waitForSelector('iframe#frameBottom iframe#frameContent', { timeout: 20000 });
-  const frame = await fbsPage.frameLocator('iframe#frameBottom iframe#frameContent');
-  console.log(`LOG: Content frame loaded`);
+  await fbsPage.waitForSelector('iframe#frameBottom', { timeout: 20000 });
+  const frame1 = await fbsPage.frameLocator('iframe#frameBottom');
+  console.log(`LOG: Content frame 1 loaded`);
+
+  await frame1.waitForSelector("iframe#frameContent", { timeout: 20000 });
+  const frame = await frame1.frameLocator("iframe#frameContent");
+  console.log(`LOG: Core content frame loaded`);
 
   // 3. Wait for and set the date picker
   await frame.locator('input#DateBookingFrom_c1_textDate').waitFor({ timeout: 20000 });
