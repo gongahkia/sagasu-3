@@ -125,15 +125,37 @@ const SCRAPE_CONFIG = {
   if (!frameContent) throw new Error('Frame object for frameContent not available');
   console.log(`LOG: Core content frame loaded`);
 
-  // --- FUA continue editing from below here
-
   // 3. Wait for and set the date picker
   await frameContent.waitForSelector('input#DateBookingFrom_c1_textDate', { timeout: 20000 });
-  await frameContent.fill('input#DateBookingFrom_c1_textDate', SCRAPE_CONFIG.date);
+  await frameContent.click('input#DateBookingFrom_c1_textDate');
+  const desiredDate = SCRAPE_CONFIG.date;
+  for(let tries = 0; tries < 20; tries++) { 
+    const currentDate = await frameContent.$eval(
+      'input#DateBookingFrom_c1_textDate',
+      el => el.value
+    );
+    if (currentDate === desiredDate) {
+      console.log(`LOG: Date picker set to desired date: ${currentDate}`);
+      break;
+    }
+    console.log(`LOG: Date is ${currentDate} and desired date is ${desiredDate}. Clicking next to try to reach ${desiredDate}`);
+    await frameContent.click('a#BtnDpcNext');
+    await frameContent.waitForTimeout(500);
+  }
+  const finalDate = await frameContent.$eval(
+    'input#DateBookingFrom_c1_textDate',
+    el => el.value
+  );
+  if (finalDate !== desiredDate) {
+    throw new Error(`ERROR: Could not reach desired date "${desiredDate}". Final date was: "${finalDate}"`);
+  }
 
   // 4. Set start and end time dropdowns
   await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
   await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
+  fbsPage.pause();
+
+  // --- FUA continue editing from below here
 
   // 5. Set building(s)
   if (SCRAPE_CONFIG.buildingNames?.length) {
