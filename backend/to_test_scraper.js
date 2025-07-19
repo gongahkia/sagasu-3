@@ -109,15 +109,18 @@ const SCRAPE_CONFIG = {
 
   // ---- SCRAPING & FILTERING ---- //
 
-  fbsPage.pause(); // debug pause
-
-  // Wait for content frame to load
   await fbsPage.waitForSelector('iframe#frameBottom', { timeout: 20000 });
-  const frame1 = await fbsPage.frameLocator('iframe#frameBottom');
-  console.log(`LOG: Content frame 1 loaded`);
+  const frameBottomElement = await fbsPage.$('iframe#frameBottom');
+  if (!frameBottomElement) throw new Error('iframe#frameBottom not found');
+  const frameBottom = await frameBottomElement.contentFrame();
+  if (!frameBottom) throw new Error('Frame object for frameBottom not available');
+  console.log(`LOG: Content frame bottom loaded`);
 
-  await frame1.waitForSelector("iframe#frameContent", { timeout: 20000 });
-  const frame = await frame1.frameLocator("iframe#frameContent");
+  await frameBottom.waitForSelector('iframe#frameContent', { timeout: 20000 });
+  const frameContentElement = await frameBottom.$('iframe#frameContent');
+  if (!frameContentElement) throw new Error('iframe#frameContent not found inside frameBottom');
+  const frameContent = await frameContentElement.contentFrame();
+  if (!frameContent) throw new Error('Frame object for frameContent not available');
   console.log(`LOG: Core content frame loaded`);
 
   // 3. Wait for and set the date picker
