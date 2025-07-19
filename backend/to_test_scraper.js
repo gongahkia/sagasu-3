@@ -161,12 +161,15 @@ const SCRAPE_CONFIG = {
 
   // 5. Set building(s)
   if (SCRAPE_CONFIG.buildingNames?.length) {
-    await frame.locator('#DropMultiBuildingList_c1_textItem').click();
+    await frameContent.locator('#DropMultiBuildingList_c1_textItem').click();
     for (const building of SCRAPE_CONFIG.buildingNames) {
-      await frame.locator(`text="${building}"`).click();
+      await frameContent.locator(`text="${building}"`).click();
     }
     await fbsPage.keyboard.press('Escape');
+    console.log('Clicked Escape');
   }
+  console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
 
   // 6. Set floor(s)
   if (SCRAPE_CONFIG.floorNames?.length) {
