@@ -11,6 +11,7 @@
 * see whether this can be deployed also as a telegram app
 * then furnish this README.md as required
 * see whether i can apply booking functionality as an extension of this
+* actually write an xml scraper script that monitors whether XML schema of the site has changed and flags accordingly
 
 [![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
 
@@ -28,15 +29,24 @@
 
 ## Stack
 
-...
+* *Frontend*: 
+* *Backend*:
+* *Auth*: 
+* *Script*: 
+* *Package*: [Docker]()
+* *CI/CD*:
 
 ## Architecture
 
-...
+![](./asset/reference/architecture.png)
 
 ## Usage
 
-...
+```console
+$ git clone https://github.com/gongahkia/sagasu-3 && cd sagasu-3/backend
+$ npm i && node to_test_scraper.js
+$ npm i && node login_script.js
+```
 
 ## Other notes
 
