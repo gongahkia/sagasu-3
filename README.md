@@ -45,7 +45,7 @@
 1. First execute the below.
 
 ```console
-$ git clone https://github.com/gongahkia/sagasu-3 && cd sagasu-3/backend
+$ git clone https://github.com/gongahkia/sagasu-3 
 ```
 
 2. Then create a `.env` file at [backend](./backend/).
@@ -60,8 +60,8 @@ SMU_PASSWORD=XXX
 ```console
 $ pip install -r lib/requirements.txt
 $ python3 lib/cli.py
-$ npm i && node to_test_scraper.js
-$ npm i && node login_script.js
+$ cd backend && npm i && node to_test_scraper.js
+$ cd backend && npm i && node login_script.js
 ```
 
 ## Other notes
