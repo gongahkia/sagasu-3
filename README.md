@@ -32,8 +32,8 @@
 * *Frontend*: 
 * *Backend*:
 * *Auth*: 
-* *Script*: 
-* *Package*: [Docker]()
+* *Script*: [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Python](https://www.python.org/)
+* *Package*: [Docker](https://www.docker.com/)
 * *CI/CD*:
 
 ## Architecture
@@ -55,11 +55,16 @@ SMU_EMAIL=XXX
 SMU_PASSWORD=XXX
 ```
 
-3. Finally run the below.
+3. Run the `.env` population [script](./lib/cli.py).
 
 ```console
-$ pip install -r lib/requirements.txt
+$ python3 -m venv myenv && source myenv/bin/activate && pip install -r lib/requirements.txt
 $ python3 lib/cli.py
+```
+
+4. Finally run the below.
+
+```
 $ cd backend && npm i && node to_test_scraper.js
 $ cd backend && npm i && node login_script.js
 ```
