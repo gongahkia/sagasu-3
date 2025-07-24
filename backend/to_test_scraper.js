@@ -269,11 +269,11 @@ const outputLog = './booking_log/scraped_log.json';
   // 10. Click "Check Availability" and navigate to results page
   await frameContent.locator('a#CheckAvailability').click();
   await fbsPage.waitForLoadState('networkidle');
-  console.log(`LOG: Clicked "Check Availability and navigated to results page`);
-  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
+  console.log(`LOG: Clicked "Check Availability" and navigated to results page`);
 
-  await frameContent.waitForTimeout(7000); 
-  fbsPage.pause(); // debug pause
+  await frameContent.waitForTimeout(10000); 
+  console.log(`LOG: Forcing a timeout of 10000ms to allow the page to update`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
   // --- FUA continue editing from below here
 
