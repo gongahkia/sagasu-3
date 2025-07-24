@@ -42,8 +42,30 @@
 
 ## Usage
 
+1. First execute the below.
+
 ```console
 $ git clone https://github.com/gongahkia/sagasu-3 && cd sagasu-3/backend
+```
+
+2. Then create a `.env` file at [backend](./backend/).
+
+```env
+SMU_EMAIL=XXX
+SMU_PASSWORD=XXX
+SCRAPE_DATE=XXX
+SCRAPE_START_TIME=XXX
+SCRAPE_END_TIME=XXX
+SCRAPE_ROOM_CAPACITY=XXX
+SCRAPE_BUILDING_NAMES=XXX
+SCRAPE_FLOOR_NAMES=XXX
+SCRAPE_FACILITY_TYPES=XXX
+SCRAPE_EQUIPMENT=XXX
+```
+
+3. Finally run the below.
+
+```console
 $ npm i && node to_test_scraper.js
 $ npm i && node login_script.js
 ```
