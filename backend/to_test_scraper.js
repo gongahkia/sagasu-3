@@ -169,44 +169,54 @@ const SCRAPE_CONFIG = {
   console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
 
-  // --- FUA continue editing from below here
-
   // 6. Set floor(s)
   if (SCRAPE_CONFIG.floorNames?.length) {
-    await frame.locator('#DropMultiFloorList_c1_textItem').click();
+    await frameContent.locator('#DropMultiFloorList_c1_textItem').click();
     for (const floor of SCRAPE_CONFIG.floorNames) {
-      await frame.locator(`text="${floor}"`).click();
+      await frameContent.locator(`text="${floor}"`).click();
     }
     await fbsPage.keyboard.press('Escape');
+    console.log('Clicked Escape');
   }
+  console.log(`LOG: Set floor(s) to ${SCRAPE_CONFIG.floorNames}`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/floor_selection_debug.png`, fullPage: true });
 
   // 7. Set facility type(s)
   if (SCRAPE_CONFIG.facilityTypes?.length) {
-    await frame.locator('#DropMultiFacilityTypeList_c1_textItem').click();
+    await frameContent.locator('#DropMultiFacilityTypeList_c1_textItem').click();
     for (const facType of SCRAPE_CONFIG.facilityTypes) {
-      await frame.locator(`text="${facType}"`).click();
+      await frameContent.locator(`text="${facType}"`).click();
     }
     await fbsPage.keyboard.press('Escape');
+    console.log('Clicked Escape');
   }
+  console.log(`LOG: Set facility type(s) to ${SCRAPE_CONFIG.facilityTypes}`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/facility_type_selection_debug.png`, fullPage: true });
 
   // 8. Set room capacity
-  await frame.locator('select#DropCapacity_c1').selectOption({ value: SCRAPE_CONFIG.roomCapacity });
+  await frameContent.locator('select#DropCapacity_c1').selectOption({ value: SCRAPE_CONFIG.roomCapacity });
+  console.log(`LOG: Set room capacity to ${SCRAPE_CONFIG.roomCapacity}`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/room_capacity_selection_debug.png`, fullPage: true });
 
   // 9. Set equipment (optional)
   if (SCRAPE_CONFIG.equipment?.length) {
-    await frame.locator('#DropMultiEquipmentList_c1_textItem').click();
+    await frameContent.locator('#DropMultiEquipmentList_c1_textItem').click();
     for (const eq of SCRAPE_CONFIG.equipment) {
-      await frame.locator(`text="${eq}"`).click();
+      await frameContent.locator(`text="${eq}"`).click();
     }
     await fbsPage.keyboard.press('Escape');
+    console.log('Clicked Escape');
   }
+  console.log(`LOG: Set equipment to ${SCRAPE_CONFIG.equipment}`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/equipment_selection_debug.png`, fullPage: true });
 
-  // 10. Click "Check Availability"
-  await frame.locator('a#CheckAvailability').click();
+  // 10. Click "Check Availability" and navigate to results page
+  await frameContent.locator('a#CheckAvailability').click();
   await fbsPage.waitForLoadState('networkidle');
-
-  // 11. Screenshot results table
+  console.log(`LOG: Clicked "Check Availability and navigated to results page`);
   await fbsPage.screenshot({ path: `${screenshotDir}/timeslots.png`, fullPage: true });
+
+  // --- FUA continue editing from below here
 
   // 12. Scrape table results (room and timeslot booking state)
   await frame.locator('table#GridResults_gv').waitFor({ timeout: 20000 });
