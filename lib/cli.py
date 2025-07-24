@@ -134,7 +134,7 @@ VALID_EQUIPMENT = [
     "Wireless Projection",
 ]
 
-ENV_FILE = ".env"
+ENV_FILE = "../backend/.env"
 
 # --- HELPER FUNCTIONS ---
 
