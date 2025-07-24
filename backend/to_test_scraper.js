@@ -275,7 +275,6 @@ const outputLog = './booking_log/scraped_log.json';
     if (tds.length > 1) {
       const roomName = (await tds[1].innerText()).trim();
       matchingRooms.push(roomName);
-      console.log(`LOG: Found room: ${roomName}`);
     }
   }
   if (matchingRooms.length === 0) {
@@ -283,7 +282,7 @@ const outputLog = './booking_log/scraped_log.json';
     await browser.close();
     return;
   }
-  console.log(`LOG: Matched ${matchingRooms.length} rooms: ${matchingRooms}`);
+  console.log(`LOG: Matched ${matchingRooms.length} rooms (${matchingRooms})`);
 
   // 11. Click "Check Availability" 
   await frameContent.locator('a#CheckAvailability').click();
