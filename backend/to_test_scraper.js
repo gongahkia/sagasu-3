@@ -176,9 +176,9 @@ const outputLog = './booking_log/scraped_log.json';
     for (const building of SCRAPE_CONFIG.buildingNames) {
       await frameContent.locator(`text="${building}"`).click();
     }
-    const okButton = await frameContent.locator('#DropMultiBuildingList_c1_panelContainer input[type="button"][value="OK"]');
-    if (await okButton.count() > 0) {
-      await okButton.click();
+    const okButtonBuildingContainer = await frameContent.locator('#DropMultiBuildingList_c1_panelContainer input[type="button"][value="OK"]');
+    if (await okButtonBuildingContainer.count() > 0) {
+      await okButtonBuildingContainer.click();
       console.log('Clicked OK button in building selection');
     } else {
       console.warn('OK button not found in building selection, fallback to pressing Escape');
@@ -194,9 +194,9 @@ const outputLog = './booking_log/scraped_log.json';
     for (const floor of SCRAPE_CONFIG.floorNames) {
       await frameContent.locator(`text="${floor}"`).click();
     }
-    const okButton = await frameContent.locator('#DropMultiFloorList_c1_panelContainer input[type="button"][value="OK"]');
-    if (await okButton.count() > 0) {
-      await okButton.click();
+    const okButtonFloorContainer = await frameContent.locator('#DropMultiFloorList_c1_panelContainer input[type="button"][value="OK"]');
+    if (await okButtonFloorContainer.count() > 0) {
+      await okButtonFloorContainer.click();
       console.log('Clicked OK button in floor selection');
     } else {
       console.warn('OK button not found in floor selection, fallback to pressing Escape');
@@ -212,9 +212,9 @@ const outputLog = './booking_log/scraped_log.json';
     for (const facType of SCRAPE_CONFIG.facilityTypes) {
       await frameContent.locator(`text="${facType}"`).click();
     }
-    const okButton = await frameContent.locator('#DropMultiFacilityTypeList_c1_panelContainer input[type="button"][value="OK"]');
-    if (await okButton.count() > 0) {
-      await okButton.click();
+    const okButtonFacilityContainer = await frameContent.locator('#DropMultiFacilityTypeList_c1_panelContainer input[type="button"][value="OK"]');
+    if (await okButtonFacilityContainer.count() > 0) {
+      await okButtonFacilityContainer.click();
       console.log('Clicked OK button in facility type selection');
     } else {
       console.warn('OK button not found in facility type selection, fallback to pressing Escape');
@@ -235,9 +235,9 @@ const outputLog = './booking_log/scraped_log.json';
     for (const eq of SCRAPE_CONFIG.equipment) {
       await frameContent.locator(`text="${eq}"`).click();
     }
-    const okButton = await frameContent.locator('#DropMultiEquipmentList_c1_panelContainer input[type="button"][value="OK"]');
-    if (await okButton.count() > 0) {
-      await okButton.click();
+    const okButtonEquipmentContainer= await frameContent.locator('#DropMultiEquipmentList_c1_panelContainer input[type="button"][value="OK"]');
+    if (await okButtonEquipmentContainer.count() > 0) {
+      await okButtonEquipmentContainer.click();
       console.log('Clicked OK button in equipment selection');
     } else {
       console.warn('OK button not found in equipment selection, fallback to pressing Escape');
