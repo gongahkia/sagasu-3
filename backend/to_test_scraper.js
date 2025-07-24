@@ -272,6 +272,9 @@ const outputLog = './booking_log/scraped_log.json';
   console.log(`LOG: Clicked "Check Availability and navigated to results page`);
   await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
+  await frameContent.waitForTimeout(7000); 
+  fbsPage.pause(); // debug pause
+
   // --- FUA continue editing from below here
 
   // 12. Scrape table results (room and timeslot booking state)
