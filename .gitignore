@@ -1,5 +1,5 @@
 node_modules
-*debug.png
+screenshot_log
 .env
 .env.local
 __pycache__
