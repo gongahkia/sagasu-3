@@ -3,29 +3,42 @@ const fs = require('fs');
 require('dotenv').config();
 
 //
+// --- HELPER FUNCTIONS ---
+//
+
+function requireEnv(key) {
+  if (!process.env[key]) throw new Error(`Missing ${key} in .env`);
+  return process.env[key];
+}
+
+//
 // --- CONFIGURATION ---
 //
 
-const EMAIL = process.env.SMU_EMAIL;
-const PASSWORD = process.env.SMU_PASSWORD;
-
-if (!EMAIL || !PASSWORD)
-  throw new Error('ERROR: Missing SMU_EMAIL or SMU_PASSWORD in .env');
+const EMAIL = requireEnv('SMU_EMAIL');
+const PASSWORD = requireEnv('SMU_PASSWORD');
+const SCRAPE_CONFIG = {
+  date: requireEnv('SCRAPE_DATE'),
+  startTime: requireEnv('SCRAPE_START_TIME'),
+  endTime: requireEnv('SCRAPE_END_TIME'),
+  roomCapacity: requireEnv('SCRAPE_ROOM_CAPACITY'),
+  buildingNames: requireEnv('SCRAPE_BUILDING_NAMES')
+    ? requireEnv('SCRAPE_BUILDING_NAMES').split(',').map(s => s.trim())
+    : [],
+  floorNames: requireEnv('SCRAPE_FLOOR_NAMES')
+    ? requireEnv('SCRAPE_FLOOR_NAMES').split(',').map(s => s.trim())
+    : [],
+  facilityTypes: requireEnv('SCRAPE_FACILITY_TYPES')
+    ? requireEnv('SCRAPE_FACILITY_TYPES').split(',').map(s => s.trim())
+    : [],
+  equipment: requireEnv('SCRAPE_EQUIPMENT')
+    ? requireEnv('SCRAPE_EQUIPMENT').split(',').map(s => s.trim())
+    : [],
+}
 
 const url = "https://www.smubondue.com/facility-booking-system-fbs";
 const screenshotDir = './screenshot_log/';
 const outputLog = './booking_log/scraped_log.json';
-
-const SCRAPE_CONFIG = {
-  date: '25-Jul-2025', 
-  startTime: '12:00',   
-  endTime: '16:00',     
-  roomCapacity: 'From6To10Pax',
-  buildingNames: ['School of Accountancy'],
-  floorNames: ['Level 1', 'Level 2', 'Level 3'],
-  facilityTypes: ['Group Study Room'],
-  equipment: ['Projector']
-};
 
 //
 // --- MAIN SCRIPT ---
@@ -163,8 +176,14 @@ const SCRAPE_CONFIG = {
     for (const building of SCRAPE_CONFIG.buildingNames) {
       await frameContent.locator(`text="${building}"`).click();
     }
-    await fbsPage.keyboard.press('Escape');
-    console.log('Clicked Escape');
+    const okButton = await frameContent.locator('input[type="button"][value="OK"]');
+    if (await okButton.count() > 0) {
+      await okButton.click();
+      console.log('Clicked OK button');
+    } else {
+      console.warn('OK button not found, fallback to pressing Escape');
+      await fbsPage.keyboard.press('Escape');
+    }
   }
   console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
@@ -175,8 +194,14 @@ const SCRAPE_CONFIG = {
     for (const floor of SCRAPE_CONFIG.floorNames) {
       await frameContent.locator(`text="${floor}"`).click();
     }
-    await fbsPage.keyboard.press('Escape');
-    console.log('Clicked Escape');
+    const okButton = await frameContent.locator('input[type="button"][value="OK"]');
+    if (await okButton.count() > 0) {
+      await okButton.click();
+      console.log('Clicked OK button');
+    } else {
+      console.warn('OK button not found, fallback to pressing Escape');
+      await fbsPage.keyboard.press('Escape');
+    }
   }
   console.log(`LOG: Set floor(s) to ${SCRAPE_CONFIG.floorNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/floor_selection_debug.png`, fullPage: true });
@@ -187,8 +212,14 @@ const SCRAPE_CONFIG = {
     for (const facType of SCRAPE_CONFIG.facilityTypes) {
       await frameContent.locator(`text="${facType}"`).click();
     }
-    await fbsPage.keyboard.press('Escape');
-    console.log('Clicked Escape');
+    const okButton = await frameContent.locator('input[type="button"][value="OK"]');
+    if (await okButton.count() > 0) {
+      await okButton.click();
+      console.log('Clicked OK button');
+    } else {
+      console.warn('OK button not found, fallback to pressing Escape');
+      await fbsPage.keyboard.press('Escape');
+    }
   }
   console.log(`LOG: Set facility type(s) to ${SCRAPE_CONFIG.facilityTypes}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/facility_type_selection_debug.png`, fullPage: true });
@@ -204,8 +235,14 @@ const SCRAPE_CONFIG = {
     for (const eq of SCRAPE_CONFIG.equipment) {
       await frameContent.locator(`text="${eq}"`).click();
     }
-    await fbsPage.keyboard.press('Escape');
-    console.log('Clicked Escape');
+    const okButton = await frameContent.locator('input[type="button"][value="OK"]');
+    if (await okButton.count() > 0) {
+      await okButton.click();
+      console.log('Clicked OK button');
+    } else {
+      console.warn('OK button not found, fallback to pressing Escape');
+      await fbsPage.keyboard.press('Escape');
+    }
   }
   console.log(`LOG: Set equipment to ${SCRAPE_CONFIG.equipment}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/equipment_selection_debug.png`, fullPage: true });
@@ -214,7 +251,7 @@ const SCRAPE_CONFIG = {
   await frameContent.locator('a#CheckAvailability').click();
   await fbsPage.waitForLoadState('networkidle');
   console.log(`LOG: Clicked "Check Availability and navigated to results page`);
-  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots.png`, fullPage: true });
+  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
   // --- FUA continue editing from below here
 
