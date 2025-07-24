@@ -58,6 +58,7 @@ SMU_PASSWORD=XXX
 3. Finally run the below.
 
 ```console
+$ pip install -r lib/requirements.txt
 $ python3 lib/cli.py
 $ npm i && node to_test_scraper.js
 $ npm i && node login_script.js

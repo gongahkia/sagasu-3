@@ -134,7 +134,7 @@ VALID_EQUIPMENT = [
     "Wireless Projection",
 ]
 
-ENV_FILE = "../backend/.env"
+ENV_FILE = "./backend/.env"
 
 # --- HELPER FUNCTIONS ---
 
@@ -184,14 +184,17 @@ def prompt_multiple(label, choices):
     return questionary.checkbox(label, choices=choices).ask() or []
 
 def main():
-    print("Loading existing .env data...")
+    print("LOG: Loading existing .env data...")
     env_data = get_existing_env()
     email = env_data.get("SMU_EMAIL", "")
     password = env_data.get("SMU_PASSWORD", "")
     if not email or not password:
         print(
-            "WARNING: SMU_EMAIL and SMU_PASSWORD not found in your .env file. Please add them before using this script."
+            "WARNING: SMU_EMAIL and SMU_PASSWORD not found in your .env file. Please add them before using this script.\nLOG: Closing script for now."
         )
+        return
+    else:
+        print("LOG: SMU_EMAIL and SMU_PASSWORD found in .env file.")
     print(f"LOG: SMU_EMAIL loaded as: {email}")
     print("LOG: (SMU_PASSWORD is hidden for security reasons)")
     scrape_date = prompt_date()
