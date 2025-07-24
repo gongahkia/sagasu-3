@@ -170,13 +170,34 @@ const outputLog = './booking_log/scraped_log.json';
   console.log(`LOG: Set start and end time dropdowns to ${SCRAPE_CONFIG.startTime} and ${SCRAPE_CONFIG.endTime}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
+  await frameContent.waitForTimeout(3000); 
+
   // 5. Set building(s)
+
+  // if (SCRAPE_CONFIG.buildingNames?.length) {
+  //   await frameContent.locator('#DropMultiBuildingList_c1_textItem').click();
+  //   for (const building of SCRAPE_CONFIG.buildingNames) {
+  //     await frameContent.locator(`text="${building}"`).click();
+  //   }
+  //   const okButton = frameContent.locator('#DropMultiBuildingList_c1_panelContainer input[type="button"][value="OK"]');
+  //   await okButton.waitFor({ state: 'visible', timeout: 5000 });
+  //   const loadingOverlay = frameContent.locator('#__updateProgress__');
+  //   if (await loadingOverlay.isVisible()) {
+  //     await loadingOverlay.waitFor({ state: 'hidden', timeout: 10000 });
+  //   }
+  //   await okButton.click();
+  //   console.log('Clicked OK button for buildings');
+  // }
+  // console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
+  // await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
+
   if (SCRAPE_CONFIG.buildingNames?.length) {
     await frameContent.locator('#DropMultiBuildingList_c1_textItem').click();
     for (const building of SCRAPE_CONFIG.buildingNames) {
       await frameContent.locator(`text="${building}"`).click();
     }
-    const okButtonBuildingContainer = await frameContent.locator('#DropMultiBuildingList_c1_panelContainer input[type="button"][value="OK"]');
+    const okButtonBuildingContainer = frameContent.locator('#DropMultiBuildingList_c1_panelContainer input[type="button"][value="OK"]');
+    await okButtonBuildingContainer.waitFor({ state: 'visible', timeout: 5000 });
     if (await okButtonBuildingContainer.count() > 0) {
       await okButtonBuildingContainer.click();
       console.log('Clicked OK button in building selection');
@@ -187,6 +208,8 @@ const outputLog = './booking_log/scraped_log.json';
   }
   console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
+
+  await frameContent.waitForTimeout(3000); 
 
   // 6. Set floor(s)
   if (SCRAPE_CONFIG.floorNames?.length) {
@@ -206,6 +229,8 @@ const outputLog = './booking_log/scraped_log.json';
   console.log(`LOG: Set floor(s) to ${SCRAPE_CONFIG.floorNames}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/floor_selection_debug.png`, fullPage: true });
 
+  await frameContent.waitForTimeout(3000); 
+
   // 7. Set facility type(s)
   if (SCRAPE_CONFIG.facilityTypes?.length) {
     await frameContent.locator('#DropMultiFacilityTypeList_c1_textItem').click();
@@ -224,10 +249,14 @@ const outputLog = './booking_log/scraped_log.json';
   console.log(`LOG: Set facility type(s) to ${SCRAPE_CONFIG.facilityTypes}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/facility_type_selection_debug.png`, fullPage: true });
 
+  await frameContent.waitForTimeout(3000); 
+
   // 8. Set room capacity
   await frameContent.locator('select#DropCapacity_c1').selectOption({ value: SCRAPE_CONFIG.roomCapacity });
   console.log(`LOG: Set room capacity to ${SCRAPE_CONFIG.roomCapacity}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/room_capacity_selection_debug.png`, fullPage: true });
+
+  await frameContent.waitForTimeout(3000); 
 
   // 9. Set equipment (optional)
   if (SCRAPE_CONFIG.equipment?.length) {
@@ -246,6 +275,8 @@ const outputLog = './booking_log/scraped_log.json';
   }
   console.log(`LOG: Set equipment to ${SCRAPE_CONFIG.equipment}`);
   await fbsPage.screenshot({ path: `${screenshotDir}/equipment_selection_debug.png`, fullPage: true });
+
+  await frameContent.waitForTimeout(3000); 
 
   // 10. Click "Check Availability" and navigate to results page
   await frameContent.locator('a#CheckAvailability').click();
