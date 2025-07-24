@@ -183,9 +183,9 @@ const outputLog = './booking_log/scraped_log.json';
     await okButtonBuildingContainer.waitFor({ state: 'visible', timeout: 5000 });
     if (await okButtonBuildingContainer.count() > 0) {
       await okButtonBuildingContainer.click();
-      console.log('Clicked OK button in building selection');
+      console.log('LOG: Clicked OK button in building selection');
     } else {
-      console.warn('OK button not found in building selection, fallback to pressing Escape');
+      console.warn('ERROR: OK button not found in building selection, fallback to pressing Escape');
       await fbsPage.keyboard.press('Escape');
     }
   }
@@ -204,9 +204,9 @@ const outputLog = './booking_log/scraped_log.json';
     const okButtonFloorContainer = await frameContent.locator('#DropMultiFloorList_c1_panelContainer input[type="button"][value="OK"]');
     if (await okButtonFloorContainer.count() > 0) {
       await okButtonFloorContainer.click();
-      console.log('Clicked OK button in floor selection');
+      console.log('LOG: Clicked OK button in floor selection');
     } else {
-      console.warn('OK button not found in floor selection, fallback to pressing Escape');
+      console.warn('ERROR: OK button not found in floor selection, fallback to pressing Escape');
       await fbsPage.keyboard.press('Escape');
     }
   }
@@ -225,9 +225,9 @@ const outputLog = './booking_log/scraped_log.json';
     const okButtonFacilityContainer = await frameContent.locator('#DropMultiFacilityTypeList_c1_panelContainer input[type="button"][value="OK"]');
     if (await okButtonFacilityContainer.count() > 0) {
       await okButtonFacilityContainer.click();
-      console.log('Clicked OK button in facility type selection');
+      console.log('LOG: Clicked OK button in facility type selection');
     } else {
-      console.warn('OK button not found in facility type selection, fallback to pressing Escape');
+      console.warn('ERROR: OK button not found in facility type selection, fallback to pressing Escape');
       await fbsPage.keyboard.press('Escape');
     }
   }
@@ -254,9 +254,9 @@ const outputLog = './booking_log/scraped_log.json';
     const okButtonEquipmentContainer= await frameContent.locator('#DropMultiEquipmentList_c1_panelContainer input[type="button"][value="OK"]');
     if (await okButtonEquipmentContainer.count() > 0) {
       await okButtonEquipmentContainer.click();
-      console.log('Clicked OK button in equipment selection');
+      console.log('LOG: Clicked OK button in equipment selection');
     } else {
-      console.warn('OK button not found in equipment selection, fallback to pressing Escape');
+      console.warn('ERROR: OK button not found in equipment selection, fallback to pressing Escape');
       await fbsPage.keyboard.press('Escape');
     }
   }
