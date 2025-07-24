@@ -266,37 +266,40 @@ const outputLog = './booking_log/scraped_log.json';
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
 
-  // 10. Click "Check Availability" and navigate to results page
-  await frameContent.locator('a#CheckAvailability').click();
-  await fbsPage.waitForLoadState('networkidle');
-  console.log(`LOG: Clicked "Check Availability" and navigated to results page`);
-
-  await frameContent.waitForTimeout(10000); 
-  console.log(`LOG: Forcing a timeout of 10000ms to allow the page to update`);
-  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
-
-  // --- FUA continue editing from below here
-
-  // 12. Scrape table results (room and timeslot booking state)
-  await frame.locator('table#GridResults_gv').waitFor({ timeout: 20000 });
-  const rooms = await frame.locator('table#GridResults_gv tbody tr').all();
-
+  // 10. Retrieve available rooms
+  await frameContent.locator('table#GridResults_gv').waitFor({ timeout: 20000 });
+  const rooms = await frameContent.locator('table#GridResults_gv tbody tr').all();
   let matchingRooms = [];
   for (const row of rooms) {
     const tds = await row.locator('td').all();
     if (tds.length > 1) {
       const roomName = (await tds[1].innerText()).trim();
       matchingRooms.push(roomName);
+      console.log(`LOG: Found room: ${roomName}`);
     }
   }
   if (matchingRooms.length === 0) {
-    console.log('No rooms found.');
+    console.log('LOG: No rooms found.');
     await browser.close();
     return;
   }
-  console.log(`Matched rooms:`, matchingRooms);
+  console.log(`LOG: Matched ${matchingRooms.length} rooms: ${matchingRooms}`);
 
-  // 13. Scrape time slots (custom demo: print title popovers)
+  // 11. Click "Check Availability" 
+  await frameContent.locator('a#CheckAvailability').click();
+  await fbsPage.waitForLoadState('networkidle');
+  console.log(`LOG: Clicked "Check Availability" button`);
+
+  // 12. Navigate to results page
+  await frameContent.waitForTimeout(10000); 
+  console.log(`LOG: Forcing a timeout of 10000ms to allow the page to update`);
+  await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
+
+  // --- FUA continue editing from below here
+
+  // 13. Scrape time slots (room and timeslot booking state)
+  // await fbsPage.waitForSelector('iframe#frameContent', { timeout: 20000 });
+  // const newFrameContent = await fbsPage.$('iframe#frameContent');
   const availableTimeslots = await frame.locator('div.scheduler_bluewhite_event.scheduler_bluewhite_event_line0').all();
   let bookings = [];
   for (const slotDiv of availableTimeslots) {
