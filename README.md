@@ -65,6 +65,7 @@ $ python3 lib/cli.py
 4. Finally run the below.
 
 ```
+$ npx playwright install
 $ cd backend && npm i && node to_test_scraper.js
 $ cd backend && npm i && node login_script.js
 ```
