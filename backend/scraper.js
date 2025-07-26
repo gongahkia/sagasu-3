@@ -5,6 +5,13 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 require('dotenv').config();
+const VALID_TIME = [
+  "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30",
+  "05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
+  "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
+  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
+  "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","23:59"
+];
 
 //
 // --- HELPER FUNCTIONS ---
@@ -13,6 +20,19 @@ require('dotenv').config();
 function requireEnv(key) {
   if (!process.env[key]) throw new Error(`Missing ${key} in .env`);
   return process.env[key];
+}
+
+function generateFullTimeslotList(timePoints) {
+  const timeslots = [];
+  for (let i = 0; i < timePoints.length - 1; i++) {
+    let start = timePoints[i];
+    let end = timePoints[i + 1];
+    if (i === timePoints.length - 2 && end === "00:00") {
+      end = "23:59";
+    }
+    timeslots.push(`${start}-${end}`);
+  }
+  return timeslots;
 }
 
 function mapRoomsToTimeslots(rooms, rawTimeslots, fullTimeslotList) {
@@ -355,7 +375,7 @@ const outputLog = './log/scraped_log.json';
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
   // 14. Map rooms to timeslots
-  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings);
+  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings, generateFullTimeslotList(VALID_TIME));
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 15. Write to log
