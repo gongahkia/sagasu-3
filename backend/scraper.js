@@ -15,88 +15,6 @@ function requireEnv(key) {
   return process.env[key];
 }
 
-function generateFullTimeslotList(timePoints) {
-  const timeslots = [];
-  for (let i = 0; i < timePoints.length - 1; i++) {
-    let start = timePoints[i];
-    let end = timePoints[i + 1];
-    if (i === timePoints.length - 2 && end === "00:00") {
-      end = "23:59";
-    }
-    timeslots.push(`${start}-${end}`);
-  }
-  return timeslots;
-}
-
-function generateCoarseTimeSlots(rawTimeslots) {
-  const timePoints = new Set();
-  for (const raw of rawTimeslots) {
-    const matchBooking = raw.match(/Booking Time: ?(\\d{2}:\\d{2})-(\\d{2}:\\d{2})/);
-    if (matchBooking) {
-      timePoints.add(matchBooking[1]);
-      timePoints.add(matchBooking[2]);
-      continue;
-    }
-    const matchRange = raw.match(/\\((\\d{2}:\\d{2})-(\\d{2}:\\d{2})\\)/);
-    if (matchRange) {
-      timePoints.add(matchRange[1]);
-      timePoints.add(matchRange[2]);
-    }
-  }
-  const sorted = Array.from(timePoints).sort((a, b) => {
-    const [ha, ma] = a.split(':').map(Number);
-    const [hb, mb] = b.split(':').map(Number);
-    return ha !== hb ? ha - hb : ma - mb;
-  });
-  return generateFullTimeslotList(sorted);
-}
-
-function mapRoomsToTimeslots(rooms, rawTimeslots, fullTimeslotList) {
-  const slotsPerRoom = Math.floor(rawTimeslots.length / rooms.length);
-  const mapping = {};
-  for (let i = 0; i < rooms.length; i++) {
-    const roomSlots = rawTimeslots.slice(i * slotsPerRoom, (i + 1) * slotsPerRoom);
-    const slotStatus = {};
-    for (let raw of roomSlots) {
-      if (raw.startsWith("Booking Time:")) {
-        let lines = raw.split(/\n|\\n/);
-        let details = {};
-        let timeslot = null;
-        for (let line of lines) {
-          if (line.startsWith("Booking Time:")) {
-            timeslot = line.replace("Booking Time:", "").trim();
-          } else if (line.includes(":")) {
-            let [key, ...valParts] = line.split(":");
-            details[key.trim()] = valParts.join(":").trim();
-          }
-        }
-        if (timeslot) {
-          slotStatus[timeslot] = {
-            status: "booked",
-            details
-          };
-        }
-      } else {
-        let match = raw.match(/^\((.*?)\)\s+\((.*?)\)$/);
-        if (match) {
-          let slotTime = match[1];
-          let statusStr = match[2];
-          if (/not available/i.test(statusStr)) {
-            slotStatus[slotTime] = { status: "unavailable for booking" };
-          }
-        }
-      }
-    }
-    for (let slot of fullTimeslotList) {
-      if (!slotStatus.hasOwnProperty(slot)) {
-        slotStatus[slot] = { status: "available for booking" };
-      }
-    }
-    mapping[rooms[i]] = { time_slots: slotStatus };
-  }
-  return mapping;
-}
-
 //
 // --- CONFIGURATION ---
 //
@@ -399,12 +317,10 @@ const outputLog = './log/scraped_log.json';
   }
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
-  // FUA debug statement
-  console.log(`LOG: Generated coarse timeslots as below: ${JSON.stringify(generateCoarseTimeSlots(rawBookings))}`);
-
   // 14. Map rooms to timeslots
-  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings, generateCoarseTimeSlots(rawBookings));
-  console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
+  // ...
+  // const mapping = 
+  // console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 15. Write to log
   const logData = {
@@ -417,6 +333,7 @@ const outputLog = './log/scraped_log.json';
     facility_types: SCRAPE_CONFIG.facilityTypes,
     equipment: SCRAPE_CONFIG.equipment,
     room_mappings: mapping,
+    raw_rooms: matchingRooms,
     raw_timeslots: rawBookings,
   };
   fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
