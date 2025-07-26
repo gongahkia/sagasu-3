@@ -4,6 +4,7 @@
     * keep everything that's already there
     * just modify each room display so that each room can also be collapsed and when clicking the triangle dropdown it expands
     * then add a simple script that checks the current date and time and will show available to be booked next to each room in the collapsed display
+* update the github workflow to scrape the current day's timeslots so the day being scraped shouldn't be read from secrets, it should just be a moving variable 
 * add relevant github secrets
 * test out github workflow
 * deploy frontend/index.html to github static sites 
