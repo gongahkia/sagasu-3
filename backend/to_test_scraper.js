@@ -321,18 +321,22 @@ const outputLog = './booking_log/scraped_log.json';
 
   // 13. Scrape time slots (room and timeslot booking state)
   const eventDivs = await frameContent.locator('div.scheduler_bluewhite_event.scheduler_bluewhite_event_line0').all();
-  let bookings = [];
+  let rawBookings = [];
   for (const slotDiv of eventDivs) {
     const timeslotInfo = await slotDiv.getAttribute('title');
-    bookings.push(timeslotInfo);
-    // console.log(`LOG: Found raw timeslot info ${timeslotInfo}`);
+    rawBookings.push(timeslotInfo);
+    console.log(`LOG: Found raw timeslot info ${timeslotInfo}`);
   }
-  console.log(`LOG: Found ${bookings.length} timeslots (${bookings})`);
+  const sanitisedBookings = rawBookings.map((raw) => {
+    const sanitised = sanitiseBooking(raw);
+    return sanitised;
+  })
+  console.log(`LOG: Found ${sanitisedBookings.length} timeslots (${bookings})`);
 
   // --- FUA continue editing from below here
 
   // 14. Map rooms to timeslots
-  const mapping = mapRoomsToTimeslots(matchingRooms, bookings);
+  const mapping = mapRoomsToTimeslots(matchingRooms, sanitisedBookings);
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 14. Write to log
