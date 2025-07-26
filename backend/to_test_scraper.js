@@ -1,3 +1,7 @@
+// 
+// --- CONFIGURATION ---
+//
+
 const { chromium } = require('playwright');
 const fs = require('fs');
 require('dotenv').config();
@@ -9,6 +13,27 @@ require('dotenv').config();
 function requireEnv(key) {
   if (!process.env[key]) throw new Error(`Missing ${key} in .env`);
   return process.env[key];
+}
+
+function mapRoomsToTimeslots(rooms, timeslots) {
+  const slotsPerRoom = Math.floor(timeslots.length / rooms.length);
+  const mapping = {};
+  for (let i = 0; i < rooms.length; i++) {
+    const roomSlots = timeslots.slice(i * slotsPerRoom, (i + 1) * slotsPerRoom);
+    const slotStatus = {};
+    roomSlots.forEach(slotStr => {
+      const matches = slotStr.match(/^\((.*?)\)\s+\((.*?)\)$/);
+      if (matches) {
+        const slotTime = matches[1];
+        const statusStr = matches[2];
+        slotStatus[slotTime] = statusStr;
+      } else {
+        slotStatus[slotStr] = "unknown";
+      }
+    });
+    mapping[rooms[i]] = { time_slots: slotStatus };
+  }
+  return mapping;
 }
 
 //
@@ -294,37 +319,39 @@ const outputLog = './booking_log/scraped_log.json';
   console.log(`LOG: Forcing a timeout of 10000ms to allow the page to update`);
   await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
-  // --- FUA continue editing from below here
-
   // 13. Scrape time slots (room and timeslot booking state)
-  // await fbsPage.waitForSelector('iframe#frameContent', { timeout: 20000 });
-  // const newFrameContent = await fbsPage.$('iframe#frameContent');
-  const availableTimeslots = await frame.locator('div.scheduler_bluewhite_event.scheduler_bluewhite_event_line0').all();
+  const eventDivs = await frameContent.locator('div.scheduler_bluewhite_event.scheduler_bluewhite_event_line0').all();
   let bookings = [];
-  for (const slotDiv of availableTimeslots) {
+  for (const slotDiv of eventDivs) {
     const timeslotInfo = await slotDiv.getAttribute('title');
     bookings.push(timeslotInfo);
+    // console.log(`LOG: Found raw timeslot info ${timeslotInfo}`);
   }
-  bookings = bookings.filter(Boolean);
-  console.log('Raw timeslot titles:', bookings);
+  console.log(`LOG: Found ${bookings.length} timeslots (${bookings})`);
+
+  // --- FUA continue editing from below here
+
+  // 14. Map rooms to timeslots
+  const mapping = mapRoomsToTimeslots(matchingRooms, bookings);
+  console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 14. Write to log
-  const logData = {
-    date: SCRAPE_CONFIG.date,
-    start_time: SCRAPE_CONFIG.startTime,
-    end_time: SCRAPE_CONFIG.endTime,
-    building_names: SCRAPE_CONFIG.buildingNames,
-    floor_names: SCRAPE_CONFIG.floorNames,
-    facility_types: SCRAPE_CONFIG.facilityTypes,
-    equipment: SCRAPE_CONFIG.equipment,
-    matched_rooms: matchingRooms,
-    timeslots_raw: bookings,
-    timestamp: (new Date()).toISOString(),
-  };
-  fs.mkdirSync(screenshotDir, { recursive: true });
-  fs.mkdirSync(outputLog.substring(0, outputLog.lastIndexOf('/')), { recursive: true });
-  fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
-  console.log('✅ Scraping complete. Data written to:', outputLog);
+  // const logData = {
+  //   date: SCRAPE_CONFIG.date,
+  //   start_time: SCRAPE_CONFIG.startTime,
+  //   end_time: SCRAPE_CONFIG.endTime,
+  //   building_names: SCRAPE_CONFIG.buildingNames,
+  //   floor_names: SCRAPE_CONFIG.floorNames,
+  //   facility_types: SCRAPE_CONFIG.facilityTypes,
+  //   equipment: SCRAPE_CONFIG.equipment,
+  //   matched_rooms: matchingRooms,
+  //   timeslots_raw: bookings,
+  //   timestamp: (new Date()).toISOString(),
+  // };
+  // fs.mkdirSync(screenshotDir, { recursive: true });
+  // fs.mkdirSync(outputLog.substring(0, outputLog.lastIndexOf('/')), { recursive: true });
+  // fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
+  // console.log('✅ Scraping complete. Data written to:', outputLog);
 
   await fbsPage.pause(); // Pause for manual inspection; remove/comment for automation
   await browser.close();
