@@ -355,7 +355,7 @@ const outputLog = './log/scraped_log.json';
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
   // 14. Map rooms to timeslots
-  const mapping = mapRoomsToTimeslots(matchingRooms, sanitisedBookings);
+  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings);
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 15. Write to log

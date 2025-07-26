@@ -1,5 +1,5 @@
 node_modules
-screenshot_log
+screenshot
 .env
 .env.local
 __pycache__
