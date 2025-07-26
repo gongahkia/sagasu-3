@@ -26,18 +26,20 @@
 
 ## Stack
 
-* *Frontend*: 
-* *Backend*:
-* *Auth*: 
+* *Frontend*: [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Github Pages Site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
+* *Backend*: [Playwright](https://github.com/microsoft/playwright), [Github Actions](https://docs.github.com/en/actions), [Node.js](https://nodejs.org/en)
 * *Script*: [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Python](https://www.python.org/)
 * *Package*: [Docker](https://www.docker.com/)
-* *CI/CD*:
 
 ## Architecture
 
 ![](./asset/reference/architecture.png)
 
 ## Usage
+
+The easiest way to access `Sagasu 3` is via the Web App [here]().
+
+The below instructions are for locally hosting and running `Sagasu 3`'s scraper.
 
 1. First execute the below.
 
@@ -63,8 +65,7 @@ $ python3 lib/cli.py
 
 ```
 $ npx playwright install
-$ cd backend && npm i && node scraper.js
-$ cd backend && npm i && node login_script.js
+$ cd backend && npm i && node scraper-dev.js
 ```
 
 ## Other notes
