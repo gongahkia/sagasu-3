@@ -5,13 +5,6 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 require('dotenv').config();
-const VALID_TIME = [
-  "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30",
-  "05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
-  "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
-  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
-  "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","23:59"
-];
 
 //
 // --- HELPER FUNCTIONS ---
@@ -33,6 +26,29 @@ function generateFullTimeslotList(timePoints) {
     timeslots.push(`${start}-${end}`);
   }
   return timeslots;
+}
+
+function generateCoarseTimeSlots(rawTimeslots) {
+  const timePoints = new Set();
+  for (const raw of rawTimeslots) {
+    const matchBooking = raw.match(/Booking Time: ?(\\d{2}:\\d{2})-(\\d{2}:\\d{2})/);
+    if (matchBooking) {
+      timePoints.add(matchBooking[1]);
+      timePoints.add(matchBooking[2]);
+      continue;
+    }
+    const matchRange = raw.match(/\\((\\d{2}:\\d{2})-(\\d{2}:\\d{2})\\)/);
+    if (matchRange) {
+      timePoints.add(matchRange[1]);
+      timePoints.add(matchRange[2]);
+    }
+  }
+  const sorted = Array.from(timePoints).sort((a, b) => {
+    const [ha, ma] = a.split(':').map(Number);
+    const [hb, mb] = b.split(':').map(Number);
+    return ha !== hb ? ha - hb : ma - mb;
+  });
+  return generateFullTimeslotList(sorted);
 }
 
 function mapRoomsToTimeslots(rooms, rawTimeslots, fullTimeslotList) {
@@ -105,6 +121,15 @@ const SCRAPE_CONFIG = {
     ? requireEnv('SCRAPE_EQUIPMENT').split(',').map(s => s.trim())
     : [],
 }
+/* 
+const VALID_TIME = [
+  "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30",
+  "05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
+  "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30",
+  "15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
+  "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","23:59"
+];
+*/
 
 const url = "https://www.smubondue.com/facility-booking-system-fbs";
 const screenshotDir = './log/screenshot/';
@@ -374,8 +399,11 @@ const outputLog = './log/scraped_log.json';
   }
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
+  // FUA debug statement
+  console.log(`LOG: Generated coarse timeslots as below: ${JSON.stringify(generateCoarseTimeSlots(rawBookings))}`);
+
   // 14. Map rooms to timeslots
-  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings, generateFullTimeslotList(VALID_TIME));
+  const mapping = mapRoomsToTimeslots(matchingRooms, rawBookings, generateCoarseTimeSlots(rawBookings));
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
   // 15. Write to log
