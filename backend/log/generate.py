@@ -169,11 +169,54 @@ def generate_html(data):
         .toggle-btn:hover {{
             background: #005a9e;
         }}
+        .custom-footer {{
+            margin: 3rem auto 0 auto;
+            max-width: 800px;
+            padding: 2rem 1rem 1.5rem 1rem;
+            text-align: center;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 1rem;
+        }}
+        .footer-link {{
+            color: #0078d4;
+            text-decoration: none;
+            font-weight: 600;
+        }}
+        .footer-link:hover {{
+            text-decoration: underline;
+            color: #005a9e;
+        }}
+        .footer-btn {{
+            display: inline-block;
+            margin-top: 1.2rem;
+            margin-bottom: 1.2rem;
+            padding: 0.7em 1.8em;
+            font-size: 0.90rem;
+            font-weight: 600;
+            border-radius: 4px;
+            background: #0078d4;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+            border: none;
+            transition: background 0.2s, box-shadow 0.2s;
+        }}
+        .footer-btn:hover, .footer-btn:focus {{
+            background: #005a9e;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,50,150,0.09);
+        }}
     </style>
 </head>
 <body>
-    <h1 class="meta-header">SMU FBS Room Availability</h1>
-    <div class="meta"><strong>Scrape Date:</strong> {scrape_date} | <strong>Time Range:</strong> {scrape_time_range}</div>
+    <div align="center">
+        <h1 class="meta-header">SMU FBS Room Availability</h1>
+        <div class="meta"><strong>Scrape Date:</strong> {scrape_date} | <strong>Time Range:</strong> {scrape_time_range}</div>
+        <a class="footer-btn" href="https://github.com/gongahkia/sagasu-3/tree/main/backend/log/scraped_log.json" target="_blank" rel="noopener">
+            View the raw scraped_log.json
+        </a>
+    </div>
     <ul class="room-list">
     {''.join(f'''
         <li class="room-item" id="room-{idx}">
@@ -222,11 +265,11 @@ def generate_html(data):
         }});
     </script>
 </body>
-<div align="center">
-    <footer>
-        <a href="https://github.com/gongahkia/sagasu-3">Sagasu 3</a> was made with ❤️ by <a href="gabrielzmong.com">Gabriel Ong</a>.
-    </footer>
-</div>
+<footer class="custom-footer">
+    <div>
+        <a href="https://github.com/gongahkia/sagasu-3" class="footer-link">Sagasu 3</a> was made with <span style="color:#e25555;">&#10084;&#65039;</span> by <a href="https://gabrielzmong.com" class="footer-link">Gabriel Ong</a>.
+    </div>
+</footer>
 </html>
 """
     return html
