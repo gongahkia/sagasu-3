@@ -274,7 +274,7 @@ def generate_html(data):
 """
     return html
 
-def save_html_file(content, filename='available_rooms.html'):
+def save_html_file(content, filename='index.html'):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
 
@@ -282,7 +282,7 @@ def main():
     data = load_scraped_log('../backend/log/scraped_log.json')
     html_content = generate_html(data)
     save_html_file(html_content)
-    print("LOG: Finished generating HTML file at available_rooms.html")
+    print("LOG: Finished generating HTML file at frontend/index.html")
 
 if __name__ == '__main__':
     main()
