@@ -279,10 +279,10 @@ def save_html_file(content, filename='available_rooms.html'):
         f.write(content)
 
 def main():
-    data = load_scraped_log('scraped_log.json')
+    data = load_scraped_log('../backend/log/scraped_log.json')
     html_content = generate_html(data)
     save_html_file(html_content)
-    print("✅ Generated HTML file: available_rooms.html")
+    print("LOG: Finished generating HTML file at available_rooms.html")
 
 if __name__ == '__main__':
     main()
