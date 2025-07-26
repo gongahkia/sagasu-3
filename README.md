@@ -2,7 +2,6 @@
 
 * remember to sign out once done as part of the script (explicitly click the sign out button)
 * make scraper read from github secrets
-* ensure can be run and write logs and screenshots as relevant
 * then have it deploy a simple frontend via github pages for me to view
 * look into alternatives to run the scraper whenever i call the frontend but limit number of calls a day on the frontend client side
 * then write a simple frontend that is deployed via github pages instead of vercel similar to llmarena project for jsoh
