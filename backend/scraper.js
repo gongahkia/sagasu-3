@@ -103,11 +103,11 @@ function generateTimeslotsForRoom(rawTimeslotsForRoom) {
 function mapTimeslotsToRooms(rawRooms, rawTimeslots) {
   const result = {};
   const roomCount = rawRooms.length;
-  const roomMarker = "(00:00-08:00) (not available)";
+  const roomStartPattern = /^\(00:00-\d{2}:\d{2}\) \(not available\)$/;
   let currentRoomIndex = 0;
   let acc = [];
   for (const ts of rawTimeslots) {
-    if (ts === roomMarker && acc.length > 0) {
+  if (roomStartPattern.test(ts) && acc.length > 0) {
       if (currentRoomIndex >= roomCount) {
         throw new Error("More timeslot blocks than rooms");
       }
@@ -437,7 +437,7 @@ const outputLog = './log/scraped_log.json';
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
   // 14. Map rooms to timeslots
-  mapTimeslotsToRooms(matchingRooms, rawBookings);
+  mapping = mapTimeslotsToRooms(matchingRooms, rawBookings);
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping, null, 2)}`);
 
   // 15. Write to log
