@@ -1,0 +1,45 @@
+name: SMU Facility Booking Scraper
+
+on:
+  schedule:
+    - cron: '0 1,7 * * *'
+  workflow_dispatch: 
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    env:
+      SMU_EMAIL: ${{ secrets.SMU_EMAIL }}
+      SMU_PASSWORD: ${{ secrets.SMU_PASSWORD }}
+      SCRAPE_DATE: ${{ secrets.SCRAPE_DATE }}
+      SCRAPE_START_TIME: ${{ secrets.SCRAPE_START_TIME }}
+      SCRAPE_END_TIME: ${{ secrets.SCRAPE_END_TIME }}
+      SCRAPE_ROOM_CAPACITY: ${{ secrets.SCRAPE_ROOM_CAPACITY }}
+      SCRAPE_BUILDING_NAMES: ${{ secrets.SCRAPE_BUILDING_NAMES }}
+      SCRAPE_FLOOR_NAMES: ${{ secrets.SCRAPE_FLOOR_NAMES }}
+      SCRAPE_FACILITY_TYPES: ${{ secrets.SCRAPE_FACILITY_TYPES }}
+      SCRAPE_EQUIPMENT: ${{ secrets.SCRAPE_EQUIPMENT }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run scraper script
+      run: cd backend && node scraper-prod.js
+
+    - name: Upload log artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: scraper-logs
+        path: backend/log/scraped_log.json
