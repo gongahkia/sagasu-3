@@ -15,22 +15,47 @@ function requireEnv(key) {
   return process.env[key];
 }
 
-function mapRoomsToTimeslots(rooms, timeslots) {
-  const slotsPerRoom = Math.floor(timeslots.length / rooms.length);
+function mapRoomsToTimeslots(rooms, rawTimeslots, fullTimeslotList) {
+  const slotsPerRoom = Math.floor(rawTimeslots.length / rooms.length);
   const mapping = {};
   for (let i = 0; i < rooms.length; i++) {
-    const roomSlots = timeslots.slice(i * slotsPerRoom, (i + 1) * slotsPerRoom);
+    const roomSlots = rawTimeslots.slice(i * slotsPerRoom, (i + 1) * slotsPerRoom);
     const slotStatus = {};
-    roomSlots.forEach(slotStr => {
-      const matches = slotStr.match(/^\((.*?)\)\s+\((.*?)\)$/);
-      if (matches) {
-        const slotTime = matches[1];
-        const statusStr = matches[2];
-        slotStatus[slotTime] = statusStr;
+    for (let raw of roomSlots) {
+      if (raw.startsWith("Booking Time:")) {
+        let lines = raw.split(/\n|\\n/);
+        let details = {};
+        let timeslot = null;
+        for (let line of lines) {
+          if (line.startsWith("Booking Time:")) {
+            timeslot = line.replace("Booking Time:", "").trim();
+          } else if (line.includes(":")) {
+            let [key, ...valParts] = line.split(":");
+            details[key.trim()] = valParts.join(":").trim();
+          }
+        }
+        if (timeslot) {
+          slotStatus[timeslot] = {
+            status: "booked",
+            details
+          };
+        }
       } else {
-        slotStatus[slotStr] = "unknown";
+        let match = raw.match(/^\((.*?)\)\s+\((.*?)\)$/);
+        if (match) {
+          let slotTime = match[1];
+          let statusStr = match[2];
+          if (/not available/i.test(statusStr)) {
+            slotStatus[slotTime] = { status: "unavailable for booking" };
+          }
+        }
       }
-    });
+    }
+    for (let slot of fullTimeslotList) {
+      if (!slotStatus.hasOwnProperty(slot)) {
+        slotStatus[slot] = { status: "available for booking" };
+      }
+    }
     mapping[rooms[i]] = { time_slots: slotStatus };
   }
   return mapping;
@@ -62,8 +87,8 @@ const SCRAPE_CONFIG = {
 }
 
 const url = "https://www.smubondue.com/facility-booking-system-fbs";
-const screenshotDir = './screenshot_log/';
-const outputLog = './booking_log/scraped_log.json';
+const screenshotDir = './log/screenshot/';
+const outputLog = './log/scraped_log.json';
 
 //
 // --- MAIN SCRIPT ---
@@ -325,39 +350,33 @@ const outputLog = './booking_log/scraped_log.json';
   for (const slotDiv of eventDivs) {
     const timeslotInfo = await slotDiv.getAttribute('title');
     rawBookings.push(timeslotInfo);
-    console.log(`LOG: Found raw timeslot info ${timeslotInfo}`);
+    // console.log(`LOG: Found raw timeslot info ${timeslotInfo}`);
   }
-  const sanitisedBookings = rawBookings.map((raw) => {
-    const sanitised = sanitiseBooking(raw);
-    return sanitised;
-  })
-  console.log(`LOG: Found ${sanitisedBookings.length} timeslots (${bookings})`);
-
-  // --- FUA continue editing from below here
+  console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
   // 14. Map rooms to timeslots
   const mapping = mapRoomsToTimeslots(matchingRooms, sanitisedBookings);
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
-  // 14. Write to log
-  // const logData = {
-  //   date: SCRAPE_CONFIG.date,
-  //   start_time: SCRAPE_CONFIG.startTime,
-  //   end_time: SCRAPE_CONFIG.endTime,
-  //   building_names: SCRAPE_CONFIG.buildingNames,
-  //   floor_names: SCRAPE_CONFIG.floorNames,
-  //   facility_types: SCRAPE_CONFIG.facilityTypes,
-  //   equipment: SCRAPE_CONFIG.equipment,
-  //   matched_rooms: matchingRooms,
-  //   timeslots_raw: bookings,
-  //   timestamp: (new Date()).toISOString(),
-  // };
-  // fs.mkdirSync(screenshotDir, { recursive: true });
-  // fs.mkdirSync(outputLog.substring(0, outputLog.lastIndexOf('/')), { recursive: true });
-  // fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
-  // console.log('✅ Scraping complete. Data written to:', outputLog);
+  // --- FUA continue editing from below here
 
-  await fbsPage.pause(); // Pause for manual inspection; remove/comment for automation
+  // 15. Write to log
+  const logData = {
+    timestamp: (new Date()).toISOString(),
+    date: SCRAPE_CONFIG.date,
+    start_time: SCRAPE_CONFIG.startTime,
+    end_time: SCRAPE_CONFIG.endTime,
+    building_names: SCRAPE_CONFIG.buildingNames,
+    floor_names: SCRAPE_CONFIG.floorNames,
+    facility_types: SCRAPE_CONFIG.facilityTypes,
+    equipment: SCRAPE_CONFIG.equipment,
+    room_mappings: mapping,
+    raw_timeslots: rawBookings,
+  };
+  fs.writeFileSync(outputLog, JSON.stringify(logData, null, 2));
+  console.log('✅ Scraping complete. Data written to:', outputLog);
+
+  // await fbsPage.pause(); // debug pause for manual inspection
   await browser.close();
 
 })();
