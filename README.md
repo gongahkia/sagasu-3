@@ -1,14 +1,13 @@
 ## To do
 
-* remember to sign out once done as part of the script (explicitly click the sign out button)
-* make scraper read from github secrets
-* then have it deploy a simple frontend via github pages for me to view
-* look into alternatives to run the scraper whenever i call the frontend but limit number of calls a day on the frontend client side
-* then write a simple frontend that is deployed via github pages instead of vercel similar to llmarena project for jsoh
-* see whether this can be deployed also as a telegram app
-* then furnish this README.md as required
-* see whether i can apply booking functionality as an extension of this
-* actually write an xml scraper script that monitors whether XML schema of the site has changed and flags accordingly
+* update the generate.py to do the following
+    * keep everything that's already there
+    * just modify each room display so that each room can also be collapsed and when clicking the triangle dropdown it expands
+    * then add a simple script that checks the current date and time and will show available to be booked next to each room in the collapsed display
+* add relevant github secrets
+* test out github workflow
+* deploy frontend/index.html to github static sites 
+* furnish this README.md as required
 
 [![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
 
