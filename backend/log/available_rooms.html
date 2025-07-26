@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sagasu 3</title>
+    <link rel="icon" type="image/x-icon" href="three_logo.ico" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+                         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            margin: 0; padding: 1rem; background: #f9f9f9; color: #222;
+        }
+        h1 {
+            font-weight: 600;
+            margin-bottom: 0.25em;
+        }
+        .meta {
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .meta-header {
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .room-list {
+            list-style: none;
+            padding: 0;
+            max-width: 700px;
+            margin: auto;
+        }
+        .room-item {
+            background: #fff;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+        }
+        .room-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0078d4;
+            margin-bottom: 0.75rem;
+        }
+        .timeslot-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .timeslot-item {
+            border-top: 1px solid #eee;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        .timeslot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .timeslot-time {
+            font-weight: 600;
+            color: #333;
+        }
+        .timeslot-status {
+            font-weight: 600;
+            color: #555;
+            font-style: italic;
+            text-transform: capitalize;
+            margin-left: 1rem;
+        }
+        .timeslot-status.free {
+            color: #188038;
+        }
+        .timeslot-status.booked {
+            color: #d13438;
+        }
+        .timeslot-status["not available due to timeslot"] {
+            color: #999;
+        }
+        .details {
+            margin-top: 0.4rem;
+            font-size: 0.9rem;
+            color: #444;
+            white-space: pre-line;
+            display: none;
+            padding-left: 1rem;
+        }
+        .show .details {
+            display: block;
+        }
+        .toggle-btn {
+            font-size: 0.8rem;
+            background: #0078d4;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 0.1em 0.5em;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+            margin-left: 1rem;
+        }
+        .toggle-btn:hover {
+            background: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="meta-header">FBS Room Availability</h1>
+    <div class="meta"><strong>Scrape Date:</strong> 30-Jul-2025 | <strong>Time Range:</strong> 10:00 - 17:00</div>
+
+    <ul class="room-list">
+    
+        <li class="room-item" id="room-0">
+            <div class="room-name">KGC-4.02-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-0-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(0, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-0-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(0, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-08:30</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-0-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(0, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:30-18:00</span>
+                            <span class="timeslot-status booked">booked</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Booking Time: 08:30-18:00
+Booking Status: Confirmed
+Booking Reference Number: BK-20250724-000217
+Booked for User Name: TAN Fu Wee
+Booked for User Org Unit: Digital Marketing
+Booked for User Email Address: fwtan@smu.edu.sg
+Use Type: AdHoc
+Purpose of Booking: interview</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-0-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(0, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-0-slot-4">
+                    <div class="timeslot-header" onclick="toggleDetails(0, 4)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-1">
+            <div class="room-name">KGC-4.03-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-1-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(1, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-1-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(1, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-1-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(1, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-1-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(1, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-2">
+            <div class="room-name">KGC-4.04-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-2-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(2, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-2-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(2, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-2-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(2, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-2-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(2, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-3">
+            <div class="room-name">KGC-4.05-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-3-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(3, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-3-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(3, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-3-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(3, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-3-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(3, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-4">
+            <div class="room-name">KGC-4.06-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-4-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(4, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-4-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(4, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-4-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(4, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-4-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(4, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-5">
+            <div class="room-name">KGC-4.07-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-5-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(5, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-5-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(5, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-5-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(5, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-5-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(5, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-6">
+            <div class="room-name">KGC-4.08-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-6-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(6, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-6-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(6, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-10:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-6-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(6, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">10:00-18:00</span>
+                            <span class="timeslot-status booked">booked</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Booking Time: 10:00-18:00
+Booking Status: Confirmed
+Booking Reference Number: BK-20250321-001711
+Booked for User Name: Philip HO Zhi Yang
+Booked for User Org Unit: Instruction & Learning Services
+Booked for User Email Address: philipho@smu.edu.sg
+Use Type: AdHoc
+Purpose of Booking: Libquest</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-6-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(6, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-6-slot-4">
+                    <div class="timeslot-header" onclick="toggleDetails(6, 4)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-7">
+            <div class="room-name">KGC-4.09-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-7-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(7, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-7-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(7, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-7-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(7, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-7-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(7, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-8">
+            <div class="room-name">KGC-4.10-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-8-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(8, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-8-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(8, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-8-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(8, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-8-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(8, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-9">
+            <div class="room-name">KGC-4.11-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-9-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(9, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-9-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(9, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-08:30</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-9-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(9, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:30-18:00</span>
+                            <span class="timeslot-status booked">booked</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Booking Time: 08:30-18:00
+Booking Status: Confirmed
+Booking Reference Number: BK-20250724-000216
+Booked for User Name: TAN Fu Wee
+Booked for User Org Unit: Digital Marketing
+Booked for User Email Address: fwtan@smu.edu.sg
+Use Type: AdHoc
+Purpose of Booking: interview</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-9-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(9, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-9-slot-4">
+                    <div class="timeslot-header" onclick="toggleDetails(9, 4)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-10">
+            <div class="room-name">KGC-4.12-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-10-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(10, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-10-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(10, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-10-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(10, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-10-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(10, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+        <li class="room-item" id="room-11">
+            <div class="room-name">KGC-4.13-PR</div>
+            <ul class="timeslot-list">
+                
+                <li class="timeslot-item" id="room-11-slot-0">
+                    <div class="timeslot-header" onclick="toggleDetails(11, 0)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">00:00-08:00</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-11-slot-1">
+                    <div class="timeslot-header" onclick="toggleDetails(11, 1)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">08:00-18:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+                <li class="timeslot-item" id="room-11-slot-2">
+                    <div class="timeslot-header" onclick="toggleDetails(11, 2)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">18:00-23:59</span>
+                            <span class="timeslot-status not-available-due-to-timeslot">not available</span>
+                        </div>
+                        
+                    </div>
+                    
+                </li>
+                
+                <li class="timeslot-item" id="room-11-slot-3">
+                    <div class="timeslot-header" onclick="toggleDetails(11, 3)" role="button" tabindex="0" aria-expanded="false">
+                        <div>
+                            <span class="timeslot-time">23:59-24:00</span>
+                            <span class="timeslot-status free">free</span>
+                        </div>
+                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
+                    </div>
+                    <div class="details">Room is free and available.</div>
+                </li>
+                
+            </ul>
+        </li>
+    
+    </ul>
+
+    <script>
+        function toggleDetails(roomIdx, slotIdx) {
+            const slotId = 'room-' + roomIdx + '-slot-' + slotIdx;
+            const slotItem = document.getElementById(slotId);
+            const header = slotItem.querySelector('.timeslot-header');
+            const isExpanded = header.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                header.setAttribute('aria-expanded', 'false');
+                slotItem.classList.remove('show');
+            } else {
+                header.setAttribute('aria-expanded', 'true');
+                slotItem.classList.add('show');
+            }
+        }
+
+        // Keyboard accessibility for timeslot headers
+        document.querySelectorAll('.timeslot-header').forEach(header => {
+            header.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+        });
+    </script>
+</body>
+<div align="center">
+    <footer>
+        <a href="https://github.com/gongahkia/sagasu-3">Sagasu 3</a> was made with ❤️ by <a href="gabrielzmong.com">Gabriel Ong</a>.
+    </footer>
+</div>
+</html>
