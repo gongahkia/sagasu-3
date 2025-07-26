@@ -420,9 +420,8 @@ const outputLog = './log/scraped_log.json';
   console.log(`LOG: Found ${rawBookings.length} timeslots (${rawBookings})`);
 
   // 14. Map rooms to timeslots
-  // ...
-  // const mapping = 
-  // console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
+  mapTimeslotsToRooms(matchingRooms, rawBookings);
+  console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping, null, 2)}`);
 
   // 15. Write to log
   const logData = {
@@ -434,7 +433,7 @@ const outputLog = './log/scraped_log.json';
     floor_names: SCRAPE_CONFIG.floorNames,
     facility_types: SCRAPE_CONFIG.facilityTypes,
     equipment: SCRAPE_CONFIG.equipment,
-    // room_mappings: mapping,
+    room_mappings: mapping,
     raw_rooms: matchingRooms,
     raw_timeslots: rawBookings,
   };
