@@ -15,13 +15,6 @@ function requireEnv(key) {
   return process.env[key];
 }
 
-function parseTimeRange(timeRangeStr) {
-  const [startStr, endStr] = timeRangeStr.split("-");
-  const start = toMinutes(startStr);
-  const end = toMinutes(endStr);
-  return [start, end];
-}
-
 function toMinutes(timeStr) {
   const [h, m] = timeStr.split(":").map(Number);
   return h * 60 + m;
@@ -37,14 +30,19 @@ function timeslotStr(start, end) {
   return `${minutesToTimeStr(start)}-${minutesToTimeStr(end)}`;
 }
 
+function parseTimeRange(timeRangeStr) {
+  const [startStr, endStr] = timeRangeStr.split("-");
+  return [toMinutes(startStr), toMinutes(endStr)];
+}
+
 function extractBookingTime(rawStr) {
   const match = rawStr.match(/Booking Time: (\d{2}:\d{2}-\d{2}:\d{2})/);
   return match ? match[1] : null;
 }
 
 function generateTimeslotsForRoom(rawTimeslotsForRoom) {
-  const dayStart = 0;
-  const dayEnd = 24 * 60 -1; 
+  const DAY_START = 0;  
+  const DAY_END = 24 * 60;   
   const slots = [];
   for (const ts of rawTimeslotsForRoom) {
     if (ts.includes("(not available)")) {
@@ -76,7 +74,7 @@ function generateTimeslotsForRoom(rawTimeslotsForRoom) {
   }
   slots.sort((a, b) => a.startMin - b.startMin);
   const fullSlots = [];
-  let cursor = dayStart;
+  let cursor = DAY_START;
   for (const slot of slots) {
     if (slot.startMin > cursor) {
       fullSlots.push({
@@ -92,9 +90,9 @@ function generateTimeslotsForRoom(rawTimeslotsForRoom) {
     });
     cursor = slot.endMin;
   }
-  if (cursor < dayEnd + 1) {
+  if (cursor < DAY_END) {
     fullSlots.push({
-      timeslot: timeslotStr(cursor, dayEnd + 1),
+      timeslot: timeslotStr(cursor, DAY_END),
       status: "free",
       details: ""
     });
@@ -104,15 +102,34 @@ function generateTimeslotsForRoom(rawTimeslotsForRoom) {
 
 function mapTimeslotsToRooms(rawRooms, rawTimeslots) {
   const result = {};
-  if (rawTimeslots.length % rawRooms.length !== 0) {
-    throw new Error("The number of timeslots is not evenly divisible by number of rooms");
+  const roomCount = rawRooms.length;
+  const roomMarker = "(00:00-08:00) (not available)";
+  let currentRoomIndex = 0;
+  let acc = [];
+  for (const ts of rawTimeslots) {
+    if (ts === roomMarker && acc.length > 0) {
+      if (currentRoomIndex >= roomCount) {
+        throw new Error("More timeslot blocks than rooms");
+      }
+      result[rawRooms[currentRoomIndex]] = generateTimeslotsForRoom(acc);
+      currentRoomIndex++;
+      acc = [];
+    }
+    acc.push(ts);
   }
-  const timeslotsPerRoom = rawTimeslots.length / rawRooms.length;
-  for (let i = 0; i < rawRooms.length; i++) {
-    const startIdx = i * timeslotsPerRoom;
-    const endIdx = startIdx + timeslotsPerRoom;
-    const tsForRoom = rawTimeslots.slice(startIdx, endIdx);
-    result[rawRooms[i]] = generateTimeslotsForRoom(tsForRoom);
+  if (acc.length > 0) {
+    if (currentRoomIndex >= roomCount) {
+      throw new Error("More timeslot blocks than rooms");
+    }
+    result[rawRooms[currentRoomIndex]] = generateTimeslotsForRoom(acc);
+  }
+  while (currentRoomIndex + 1 < roomCount) {
+    currentRoomIndex++;
+    result[rawRooms[currentRoomIndex]] = [{
+      timeslot: "00:00-24:00",
+      status: "free",
+      details: ""
+    }];
   }
   return result;
 }
