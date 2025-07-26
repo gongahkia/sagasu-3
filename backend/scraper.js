@@ -358,8 +358,6 @@ const outputLog = './log/scraped_log.json';
   const mapping = mapRoomsToTimeslots(matchingRooms, sanitisedBookings);
   console.log(`LOG: Mapped rooms to timeslots as below: ${JSON.stringify(mapping)}`);
 
-  // --- FUA continue editing from below here
-
   // 15. Write to log
   const logData = {
     timestamp: (new Date()).toISOString(),
