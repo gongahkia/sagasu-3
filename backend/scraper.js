@@ -15,6 +15,108 @@ function requireEnv(key) {
   return process.env[key];
 }
 
+function parseTimeRange(timeRangeStr) {
+  const [startStr, endStr] = timeRangeStr.split("-");
+  const start = toMinutes(startStr);
+  const end = toMinutes(endStr);
+  return [start, end];
+}
+
+function toMinutes(timeStr) {
+  const [h, m] = timeStr.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function minutesToTimeStr(minutes) {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+function timeslotStr(start, end) {
+  return `${minutesToTimeStr(start)}-${minutesToTimeStr(end)}`;
+}
+
+function extractBookingTime(rawStr) {
+  const match = rawStr.match(/Booking Time: (\d{2}:\d{2}-\d{2}:\d{2})/);
+  return match ? match[1] : null;
+}
+
+function generateTimeslotsForRoom(rawTimeslotsForRoom) {
+  const dayStart = 0;
+  const dayEnd = 24 * 60 -1; 
+  const slots = [];
+  for (const ts of rawTimeslotsForRoom) {
+    if (ts.includes("(not available)")) {
+      const match = ts.match(/\((\d{2}:\d{2}-\d{2}:\d{2})\) \(not available\)/);
+      if (!match) throw new Error(`Unexpected not available format: ${ts}`);
+      const timeRangeStr = match[1];
+      const [startMin, endMin] = parseTimeRange(timeRangeStr);
+      slots.push({
+        timeslot: timeRangeStr,
+        status: "not available due to timeslot",
+        details: "",
+        startMin,
+        endMin
+      });
+    } else if (ts.startsWith("Booking Time:")) {
+      const bookingTime = extractBookingTime(ts);
+      if (!bookingTime) throw new Error(`Cannot extract booking time from: ${ts}`);
+      const [startMin, endMin] = parseTimeRange(bookingTime);
+      slots.push({
+        timeslot: bookingTime,
+        status: "booked",
+        details: ts,
+        startMin,
+        endMin
+      });
+    } else {
+      throw new Error(`Unexpected raw_timeslot format: ${ts}`);
+    }
+  }
+  slots.sort((a, b) => a.startMin - b.startMin);
+  const fullSlots = [];
+  let cursor = dayStart;
+  for (const slot of slots) {
+    if (slot.startMin > cursor) {
+      fullSlots.push({
+        timeslot: timeslotStr(cursor, slot.startMin),
+        status: "free",
+        details: ""
+      });
+    }
+    fullSlots.push({
+      timeslot: slot.timeslot,
+      status: slot.status,
+      details: slot.details
+    });
+    cursor = slot.endMin;
+  }
+  if (cursor < dayEnd + 1) {
+    fullSlots.push({
+      timeslot: timeslotStr(cursor, dayEnd + 1),
+      status: "free",
+      details: ""
+    });
+  }
+  return fullSlots;
+}
+
+function mapTimeslotsToRooms(rawRooms, rawTimeslots) {
+  const result = {};
+  if (rawTimeslots.length % rawRooms.length !== 0) {
+    throw new Error("The number of timeslots is not evenly divisible by number of rooms");
+  }
+  const timeslotsPerRoom = rawTimeslots.length / rawRooms.length;
+  for (let i = 0; i < rawRooms.length; i++) {
+    const startIdx = i * timeslotsPerRoom;
+    const endIdx = startIdx + timeslotsPerRoom;
+    const tsForRoom = rawTimeslots.slice(startIdx, endIdx);
+    result[rawRooms[i]] = generateTimeslotsForRoom(tsForRoom);
+  }
+  return result;
+}
+
 //
 // --- CONFIGURATION ---
 //
@@ -332,7 +434,7 @@ const outputLog = './log/scraped_log.json';
     floor_names: SCRAPE_CONFIG.floorNames,
     facility_types: SCRAPE_CONFIG.facilityTypes,
     equipment: SCRAPE_CONFIG.equipment,
-    room_mappings: mapping,
+    // room_mappings: mapping,
     raw_rooms: matchingRooms,
     raw_timeslots: rawBookings,
   };

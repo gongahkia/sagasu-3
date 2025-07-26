@@ -1,5 +1,6 @@
 node_modules
 screenshot
+scraped_log.json
 .env
 .env.local
 __pycache__
