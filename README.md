@@ -8,10 +8,10 @@
 * add relevant github secrets
 * remove the 23:59 to 24:00 time period 
 * test out github workflow
-* deploy frontend/index.html to github static sites 
 * furnish this README.md as required
 
 [![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
+![](https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg)
 
 # `Sagasu 3`
 
@@ -19,11 +19,9 @@
     <img src="./asset/logo/three_logo.png" width=55% height=55%>
 </p>
 
-`Sagasu 3` is provided as 
+`Sagasu 3` is served as a Web App.  
 
-## Rationale
-
-...
+Access it ***live*** [here](#usage).
 
 ## Stack
 
@@ -32,13 +30,26 @@
 * *Script*: [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Python](https://www.python.org/)
 * *Package*: [Docker](https://www.docker.com/)
 
+## Rationale
+
+Enough has already been said. If you must know why `Sagasu 3` exists, see [here](https://github.com/gongahkia/sagasu#rationale) or [here](https://github.com/gongahkia/sagasu-2#rationale).
+
+<div align="center">
+    <img src="./asset/reference/enough.webp" width="50%">
+</div>
+
+
 ## Architecture
 
 ![](./asset/reference/architecture.png)
 
+## Screenshot
+
+![](./asset/reference/1.png)
+
 ## Usage
 
-The easiest way to access `Sagasu 3` is via the Web App [here]().
+The easiest way to access `Sagasu 3` is via the ***Live Web App*** at [gabrielongzm.com/sagasu-3](https://gabrielongzm.com/sagasu-3/).
 
 The below instructions are for locally hosting and running `Sagasu 3`'s scraper.
 
@@ -55,7 +66,7 @@ SMU_EMAIL=XXX
 SMU_PASSWORD=XXX
 ```
 
-3. Run the `.env` population [script](./lib/cli.py).
+3. Run the `.env` population [script](./lib/cli.py) to specify the scraping configuration.
 
 ```console
 $ python3 -m venv myenv && source myenv/bin/activate && pip install -r lib/requirements.txt
@@ -71,7 +82,7 @@ $ cd backend && npm i && node scraper-dev.js
 
 ## Other notes
 
-Also see the following.
+`Sagasu 3` rose from the ashes of the below now archived projects.
 
 * [Sagasu](https://github.com/gongahkia/sagasu)
 * [Sagasu 2](https://github.com/gongahkia/sagasu-2)
