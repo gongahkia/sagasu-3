@@ -351,7 +351,7 @@ def generate_html(data):
 
         let matchedSlot = null;
         for (const slot of timeslots) {{
-            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            if (slot.timeslot === '23:59-24:00' || slot.timeslot === '00:00-24:00') continue; // ignore boundary slot
             const [start, end] = slot.timeslot.split('-');
             let startMin = toMinutes(start);
             let endMin = toMinutes(end);
