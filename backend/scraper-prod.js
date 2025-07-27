@@ -272,7 +272,7 @@ const outputLog = './log/scraped_log.json';
     await frameContent.click('a#BtnDpcPrev');
     await frameContent.waitForTimeout(500);
   }
-  for(let tries = 0; tries < 20; tries++) { 
+  for (let tries = 0; tries < 20; tries++) { 
     const currentDate = await frameContent.$eval(
       'input#DateBookingFrom_c1_textDate',
       el => el.value
@@ -285,7 +285,6 @@ const outputLog = './log/scraped_log.json';
     await frameContent.click('a#BtnDpcNext');
     await frameContent.waitForTimeout(500);
   }
-
   const finalDate = await frameContent.$eval(
     'input#DateBookingFrom_c1_textDate',
     el => el.value
@@ -293,6 +292,8 @@ const outputLog = './log/scraped_log.json';
   if (finalDate !== desiredDate) {
     throw new Error(`ERROR: Could not reach desired date "${desiredDate}". Final date was: "${finalDate}"`);
   }
+
+  // 4. Set start and end time dropdowns
   await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
   await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
   console.log(`LOG: Set start and end time dropdowns to ${SCRAPE_CONFIG.startTime} and ${SCRAPE_CONFIG.endTime}`);
