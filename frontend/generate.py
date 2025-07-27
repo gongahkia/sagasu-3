@@ -36,7 +36,7 @@ def generate_html(data):
     rooms = []
     for room, slots in data['room_mappings'].items():
         # Filter out timeslots of 23:59-24:00
-        filtered_slots = [slot for slot in slots if slot['timeslot'] != '23:59-24:00']
+        filtered_slots = [slot for slot in slots if slot['timeslot'] != '23:59-24:00' or slot['timeslot'] != '00:00-24:00']
 
         timeslots = []
         for slot in filtered_slots:
