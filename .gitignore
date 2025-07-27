@@ -4,3 +4,4 @@ screenshot
 .env.local
 __pycache__
 myenv
+archienv
