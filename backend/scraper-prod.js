@@ -294,6 +294,11 @@ const outputLog = './log/scraped_log.json';
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
+  const viewportSize = await fbsPage.viewportSize();
+  const randomX = Math.floor(Math.random() * (viewportSize.width - 10)) + 5;  
+  const randomY = Math.floor(Math.random() * (viewportSize.height - 10)) + 5;
+  console.log(`LOG: Clicking at random position (${randomX}, ${randomY}) to dismiss overlays or trigger UI updates`);
+  await fbsPage.mouse.click(randomX, randomY);
 
   // 5. Set building(s)
   if (SCRAPE_CONFIG.buildingNames?.length) {
