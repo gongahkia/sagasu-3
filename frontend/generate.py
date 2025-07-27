@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, time
+from datetime import datetime
 import os
 
 def to_minutes(time_str):
@@ -19,7 +19,6 @@ def find_current_timeslot(timeslots, current_min):
         start_str, end_str = slot['timeslot'].split('-')
         start_min = to_minutes(start_str)
         end_min = to_minutes(end_str)
-        # Handle the edge case for 23:59-24:00 as 1439-1440 minutes
         if end_min == 0:
             end_min = 24 * 60
         if start_min <= current_min < end_min:
@@ -31,17 +30,16 @@ def load_scraped_log(filename):
         return json.load(f)
 
 def generate_html(data):
-    # We won't filter by current time anymore; show all rooms and all timeslots.
-
     scrape_date = data.get('date', 'N/A')
     scrape_time_range = f"{data.get('start_time', 'N/A')} - {data.get('end_time', 'N/A')}"
 
-    # Prepare rooms with all timeslots
     rooms = []
     for room, slots in data['room_mappings'].items():
+        # Filter out timeslots of 23:59-24:00
+        filtered_slots = [slot for slot in slots if slot['timeslot'] != '23:59-24:00']
+
         timeslots = []
-        for slot in slots:
-            # Use custom message for empty details if free
+        for slot in filtered_slots:
             details_text = slot.get('details', '')
             if slot['status'] == 'free' and not details_text.strip():
                 details_text = 'Room is free and available.'
@@ -57,7 +55,6 @@ def generate_html(data):
             'timeslots': timeslots
         })
 
-    # Generate HTML - each room as a block, timeslots as sub-items
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,30 +95,64 @@ def generate_html(data):
         .room-item {{
             background: #fff;
             margin-bottom: 1.5rem;
-            padding: 1rem 1.5rem;
             border-radius: 6px;
             box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
         }}
-        .room-name {{
-            font-size: 1.25rem;
+        .room-summary {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
             font-weight: 700;
+            font-size: 1.25rem;
             color: #0078d4;
-            margin-bottom: 0.75rem;
+            background: #e5f1fb;
+        }}
+        .room-status {{
+            font-weight: 600;
+            font-style: italic;
+            text-transform: capitalize;
+            color: #555;
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }}
+        .room-status.free {{
+            color: #188038;
+        }}
+        .room-status.booked {{
+            color: #d13438;
+        }}
+        .room-status.not-available {{
+            color: #999;
         }}
         .timeslot-list {{
             list-style: none;
-            padding-left: 0;
+            padding-left: 1.5rem;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 0.95rem;
+        }}
+        .room-item.expanded .timeslot-list {{
+            max-height: 1000px; /* big enough to show contents */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            overflow: visible;
         }}
         .timeslot-item {{
             border-top: 1px solid #eee;
             padding: 0.5rem 0;
-            font-size: 0.95rem;
         }}
         .timeslot-header {{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
         }}
         .timeslot-time {{
             font-weight: 600;
@@ -140,18 +171,18 @@ def generate_html(data):
         .timeslot-status.booked {{
             color: #d13438;
         }}
-        .timeslot-status["not available due to timeslot"] {{
+        .timeslot-status.not-available {{
             color: #999;
         }}
         .details {{
             margin-top: 0.4rem;
-            font-size: 0.9rem;
             color: #444;
             white-space: pre-line;
             display: none;
             padding-left: 1rem;
+            font-size: 0.9rem;
         }}
-        .show .details {{
+        .timeslot-item.show-details .details {{
             display: block;
         }}
         .toggle-btn {{
@@ -220,18 +251,21 @@ def generate_html(data):
     <ul class="room-list">
     {''.join(f'''
         <li class="room-item" id="room-{idx}">
-            <div class="room-name">{room['room']}</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-{idx}">
+                <span class="room-name">{room['room']}</span>
+                <span class="room-status" id="room-status-{idx}">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-{idx}">
                 {''.join(f'''
                 <li class="timeslot-item" id="room-{idx}-slot-{sidx}">
-                    <div class="timeslot-header" onclick="toggleDetails({idx}, {sidx})" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-{idx}-{sidx}" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){{event.preventDefault(); toggleDetails(this);}}">
                         <div>
                             <span class="timeslot-time">{slot['timeslot']}</span>
                             <span class="timeslot-status {slot['status'].replace(' ', '-')}">{slot['status'].replace('not available due to timeslot', 'not available')}</span>
                         </div>
                         {f'<button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>' if slot['details'].strip() else ''}
                     </div>
-                    {f'<div class="details">{slot["details"]}</div>' if slot['details'].strip() else ''}
+                    {f'<div class="details" id="details-{idx}-{sidx}">{slot["details"]}</div>' if slot['details'].strip() else ''}
                 </li>
                 ''' for sidx, slot in enumerate(room['timeslots']))}
             </ul>
@@ -239,31 +273,97 @@ def generate_html(data):
     ''' for idx, room in enumerate(rooms))}
     </ul>
 
-    <script>
-        function toggleDetails(roomIdx, slotIdx) {{
-            const slotId = 'room-' + roomIdx + '-slot-' + slotIdx;
-            const slotItem = document.getElementById(slotId);
-            const header = slotItem.querySelector('.timeslot-header');
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            if (isExpanded) {{
-                header.setAttribute('aria-expanded', 'false');
-                slotItem.classList.remove('show');
+<script>
+    // Toggle room expansion (show/hide timeslots)
+    document.querySelectorAll('.room-summary').forEach(summary => {{
+        summary.addEventListener('click', () => {{
+            const roomItem = summary.parentElement;
+            const expanded = summary.getAttribute('aria-expanded') === 'true';
+
+            if (expanded) {{
+                roomItem.classList.remove('expanded');
+                summary.setAttribute('aria-expanded', 'false');
             }} else {{
-                header.setAttribute('aria-expanded', 'true');
-                slotItem.classList.add('show');
+                roomItem.classList.add('expanded');
+                summary.setAttribute('aria-expanded', 'true');
+            }}
+        }});
+
+        // Accessibility: toggle on Enter or Space keys
+        summary.addEventListener('keydown', (e) => {{
+            if (e.key === 'Enter' || e.key === ' ') {{
+                e.preventDefault();
+                summary.click();
+            }}
+        }});
+    }});
+
+    // Toggle details in timeslot items
+    function toggleDetails(element) {{
+        const isExpanded = element.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {{
+            element.setAttribute('aria-expanded', 'false');
+            element.parentElement.classList.remove('show-details');
+        }} else {{
+            element.setAttribute('aria-expanded', 'true');
+            element.parentElement.classList.add('show-details');
+        }}
+    }}
+
+    // Determine current local datetime
+    const now = new Date();
+    // Format as YYYY-MM-DD for date comparison
+    const pad = n => n.toString().padStart(2, '0');
+    const todayStr = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    // Function to convert HH:MM to minutes
+    function toMinutes(t) {{
+        const [h, m] = t.split(':').map(Number);
+        return h * 60 + m;
+    }}
+
+    // For each room, find current timeslot and update room status in summary
+    {''.join(f"""
+    (function() {{
+        const roomIdx = {idx};
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {{
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {{
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            }};
+        }});
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {{
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {{
+                matchedSlot = slot;
+                break;
             }}
         }}
 
-        // Keyboard accessibility for timeslot headers
-        document.querySelectorAll('.timeslot-header').forEach(header => {{
-            header.addEventListener('keydown', e => {{
-                if (e.key === 'Enter' || e.key === ' ') {{
-                    e.preventDefault();
-                    header.click();
-                }}
-            }});
-        }});
-    </script>
+        if (matchedSlot === null) {{
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        }} else {{
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }}
+    }})();
+    """ for idx, room in enumerate(rooms))}
+</script>
+
 </body>
 <footer class="custom-footer">
     <div>
