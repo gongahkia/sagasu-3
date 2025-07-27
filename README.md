@@ -2,7 +2,6 @@
 
 * add relevant github secrets
 * test out github workflow
-* furnish this README.md as required
 
 [![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
 ![](https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg)
@@ -39,7 +38,10 @@ Enough has already been said. If you must know why `Sagasu 3` exists, see [here]
 
 ## Screenshot
 
-![](./asset/reference/1.png)
+<div align="center">
+    <img src="./asset/reference/1.png" width="48%">
+    <img src="./asset/reference/2.png" width="48%">
+</div>
 
 ## Usage
 
