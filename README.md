@@ -77,7 +77,14 @@ $ cd backend && npm i && node scraper-dev.js
 ## Configuration
 
 ```env
-...
+SCRAPE_DATE=<current_day>
+SCRAPE_START_TIME='10:00'
+SCRAPE_END_TIME='17:00'
+SCRAPE_ROOM_CAPACITY='From6To10Pax'
+SCRAPE_BUILDING_NAMES='Yong Pung How School of Law/Kwa Geok Choo Law Library'
+SCRAPE_FLOOR_NAMES='Level 4'
+SCRAPE_FACILITY_TYPES='Group Study Room,Project Room'
+SCRAPE_EQUIPMENT='TV Panel'
 ```
 
 ## Other notes
