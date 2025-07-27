@@ -367,7 +367,7 @@ def generate_html(data):
 </body>
 <footer class="custom-footer">
     <div>
-        <a href="https://github.com/gongahkia/sagasu-3" class="footer-link">Sagasu 3</a> was made with <span style="color:#e25555;">&#10084;&#65039;</span> by <a href="https://gabrielzmong.com" class="footer-link">Gabriel Ong</a>.
+        <a href="https://github.com/gongahkia/sagasu-3" class="footer-link">Sagasu 3</a> was made with <span style="color:#e25555;">&#10084;&#65039;</span> by <a href="https://gabrielongzm.com" class="footer-link">Gabriel Ong</a>.
     </div>
 </footer>
 </html>
