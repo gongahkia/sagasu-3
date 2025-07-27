@@ -1,0 +1,24 @@
+name: Generate Frontend Artifacts
+
+on:
+  workflow_run:
+    workflows: ["SMU Facility Booking Scraper"]  
+    types:
+      - completed
+
+jobs:
+  run-generate-py:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}   
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'  
+
+      - name: Run generate.py
+        run: python frontend/generate.py
