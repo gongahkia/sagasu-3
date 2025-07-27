@@ -5,6 +5,7 @@ on:
     workflows: ["SMU Facility Booking Scraper"]  
     types:
       - completed
+  workflow_dispatch: 
 
 jobs:
   run-generate-py:
