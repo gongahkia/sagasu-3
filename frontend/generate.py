@@ -75,7 +75,6 @@ def generate_html(data):
         .meta {{
             color: #555;
             font-size: 0.9rem;
-            margin-bottom: 1.5rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
@@ -83,6 +82,14 @@ def generate_html(data):
         .meta-header {{
             margin-bottom: 1.5rem;
             max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }}
+        .workflows {{
+            color: #555;
+            font-size: 0.9rem;
+            max-width: 600px;
+            margin-top: 1.5rem;
             margin-left: auto;
             margin-right: auto;
         }}
@@ -221,7 +228,7 @@ def generate_html(data):
         .footer-btn {{
             display: inline-block;
             margin-top: 1.2rem;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
             padding: 0.7em 1.8em;
             font-size: 0.90rem;
             font-weight: 600;
@@ -244,6 +251,10 @@ def generate_html(data):
     <div align="center">
         <h1 class="meta-header">SMU FBS Room Availability</h1>
         <div class="meta"><strong>Scrape Date:</strong> {scrape_date} | <strong>Time Range:</strong> {scrape_time_range}</div>
+        <div class="workflows">
+            <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg" alt="scrape workflow status" />
+            <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/generate.yml/badge.svg" alt="generate workflow status" />
+        </div>
         <a class="footer-btn" href="https://github.com/gongahkia/sagasu-3/tree/main/backend/log/scraped_log.json" target="_blank" rel="noopener">
             View the raw scraped_log.json
         </a>
