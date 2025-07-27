@@ -20,16 +20,15 @@
     <img src="./asset/logo/three_logo.png" width=55% height=55%>
 </p>
 
-`Sagasu 3` is served as a Web App.  
+`Sagasu 3` is served as a [Web App](./.github/workflows/generate.yml), with a [scheduled scraper](./.github/workflows/scrape.yml) that runs daily at 9am and 12pm SGT.
 
-Access it ***live*** [here](#usage).
+Access the ***Live Web App*** [here](#usage).
 
 ## Stack
 
 * *Frontend*: [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Github Pages Site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
 * *Backend*: [Playwright](https://github.com/microsoft/playwright), [Github Actions](https://docs.github.com/en/actions), [Node.js](https://nodejs.org/en)
 * *Script*: [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Python](https://www.python.org/)
-* *Package*: [Docker](https://www.docker.com/)
 
 ## Rationale
 
