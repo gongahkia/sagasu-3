@@ -159,7 +159,6 @@ const SCRAPE_CONFIG = {
 }
 
 const url = "https://www.smubondue.com/facility-booking-system-fbs";
-const screenshotDir = './log/screenshot/';
 const outputLog = './log/scraped_log.json';
 
 //
@@ -238,8 +237,6 @@ const outputLog = './log/scraped_log.json';
 
   const finalUrl = newPage.url();
   const fbsPage = newPage;
-  // fs.mkdirSync(screenshotDir, { recursive: true });
-  // await fbsPage.screenshot({ path: `${screenshotDir}/after_smu_login2_login_debug.png`, fullPage: true });
   console.log(`LOG: Arrived at dashboard at url ${finalUrl} and saved screenshot`);
 
   // ---- SCRAPING & FILTERING ---- //
@@ -284,13 +281,11 @@ const outputLog = './log/scraped_log.json';
   if (finalDate !== desiredDate) {
     throw new Error(`ERROR: Could not reach desired date "${desiredDate}". Final date was: "${finalDate}"`);
   }
-  // await fbsPage.screenshot({ path: `${screenshotDir}/date_picker_debug.png`, fullPage: true });
 
   // 4. Set start and end time dropdowns
   await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
   await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
   console.log(`LOG: Set start and end time dropdowns to ${SCRAPE_CONFIG.startTime} and ${SCRAPE_CONFIG.endTime}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -317,7 +312,6 @@ const outputLog = './log/scraped_log.json';
     }
   }
   console.log(`LOG: Set building(s) to ${SCRAPE_CONFIG.buildingNames}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/building_selection_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -338,7 +332,6 @@ const outputLog = './log/scraped_log.json';
     }
   }
   console.log(`LOG: Set floor(s) to ${SCRAPE_CONFIG.floorNames}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/floor_selection_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -359,7 +352,6 @@ const outputLog = './log/scraped_log.json';
     }
   }
   console.log(`LOG: Set facility type(s) to ${SCRAPE_CONFIG.facilityTypes}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/facility_type_selection_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -367,7 +359,6 @@ const outputLog = './log/scraped_log.json';
   // 8. Set room capacity
   await frameContent.locator('select#DropCapacity_c1').selectOption({ value: SCRAPE_CONFIG.roomCapacity });
   console.log(`LOG: Set room capacity to ${SCRAPE_CONFIG.roomCapacity}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/room_capacity_selection_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -388,7 +379,6 @@ const outputLog = './log/scraped_log.json';
     }
   }
   console.log(`LOG: Set equipment to ${SCRAPE_CONFIG.equipment}`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/equipment_selection_debug.png`, fullPage: true });
 
   await frameContent.waitForTimeout(3000); 
   console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
@@ -419,7 +409,6 @@ const outputLog = './log/scraped_log.json';
   // 12. Navigate to results page
   await frameContent.waitForTimeout(10000); 
   console.log(`LOG: Forcing a timeout of 10000ms to allow the page to update`);
-  // await fbsPage.screenshot({ path: `${screenshotDir}/timeslots_debug.png`, fullPage: true });
 
   // 13. Scrape time slots (room and timeslot booking state)
   const eventDivs = await frameContent.locator('div.scheduler_bluewhite_event.scheduler_bluewhite_event_line0').all();
