@@ -38,30 +38,64 @@
         .room-item {
             background: #fff;
             margin-bottom: 1.5rem;
-            padding: 1rem 1.5rem;
             border-radius: 6px;
             box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        .room-name {
-            font-size: 1.25rem;
+        .room-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
             font-weight: 700;
+            font-size: 1.25rem;
             color: #0078d4;
-            margin-bottom: 0.75rem;
+            background: #e5f1fb;
+        }
+        .room-status {
+            font-weight: 600;
+            font-style: italic;
+            text-transform: capitalize;
+            color: #555;
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        .room-status.free {
+            color: #188038;
+        }
+        .room-status.booked {
+            color: #d13438;
+        }
+        .room-status.not-available {
+            color: #999;
         }
         .timeslot-list {
             list-style: none;
-            padding-left: 0;
+            padding-left: 1.5rem;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .room-item.expanded .timeslot-list {
+            max-height: 1000px; /* big enough to show contents */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            overflow: visible;
         }
         .timeslot-item {
             border-top: 1px solid #eee;
             padding: 0.5rem 0;
-            font-size: 0.95rem;
         }
         .timeslot-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
         }
         .timeslot-time {
             font-weight: 600;
@@ -80,18 +114,18 @@
         .timeslot-status.booked {
             color: #d13438;
         }
-        .timeslot-status["not available due to timeslot"] {
+        .timeslot-status.not-available {
             color: #999;
         }
         .details {
             margin-top: 0.4rem;
-            font-size: 0.9rem;
             color: #444;
             white-space: pre-line;
             display: none;
             padding-left: 1rem;
+            font-size: 0.9rem;
         }
-        .show .details {
+        .timeslot-item.show-details .details {
             display: block;
         }
         .toggle-btn {
@@ -160,11 +194,14 @@
     <ul class="room-list">
     
         <li class="room-item" id="room-0">
-            <div class="room-name">KGC-4.02-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-0">
+                <span class="room-name">KGC-4.02-PR</span>
+                <span class="room-status" id="room-status-0">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-0">
                 
                 <li class="timeslot-item" id="room-0-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(0, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-0-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -175,25 +212,25 @@
                 </li>
                 
                 <li class="timeslot-item" id="room-0-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(0, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-0-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-08:30</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-0-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-0-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(0, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-0-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:30-18:00</span>
                             <span class="timeslot-status booked">booked</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Booking Time: 08:30-18:00
+                    <div class="details" id="details-0-2">Booking Time: 08:30-18:00
 Booking Status: Confirmed
 Booking Reference Number: BK-20250724-000217
 Booked for User Name: TAN Fu Wee
@@ -204,7 +241,7 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-0-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(0, 3)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-0-3" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -214,26 +251,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-0-slot-4">
-                    <div class="timeslot-header" onclick="toggleDetails(0, 4)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-1">
-            <div class="room-name">KGC-4.03-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-1">
+                <span class="room-name">KGC-4.03-PR</span>
+                <span class="room-status" id="room-status-1">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-1">
                 
                 <li class="timeslot-item" id="room-1-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(1, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-1-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -244,18 +273,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-1-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(1, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-1-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-1-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-1-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(1, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-1-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -265,26 +294,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-1-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(1, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-2">
-            <div class="room-name">KGC-4.04-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-2">
+                <span class="room-name">KGC-4.04-PR</span>
+                <span class="room-status" id="room-status-2">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-2">
                 
                 <li class="timeslot-item" id="room-2-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(2, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-2-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -295,18 +316,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-2-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(2, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-2-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-2-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-2-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(2, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-2-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -316,26 +337,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-2-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(2, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-3">
-            <div class="room-name">KGC-4.05-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-3">
+                <span class="room-name">KGC-4.05-PR</span>
+                <span class="room-status" id="room-status-3">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-3">
                 
                 <li class="timeslot-item" id="room-3-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(3, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-3-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -346,18 +359,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-3-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(3, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-3-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-3-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-3-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(3, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-3-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -367,26 +380,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-3-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(3, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-4">
-            <div class="room-name">KGC-4.06-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-4">
+                <span class="room-name">KGC-4.06-PR</span>
+                <span class="room-status" id="room-status-4">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-4">
                 
                 <li class="timeslot-item" id="room-4-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(4, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-4-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -397,18 +402,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-4-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(4, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-4-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-4-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-4-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(4, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-4-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -418,26 +423,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-4-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(4, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-5">
-            <div class="room-name">KGC-4.07-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-5">
+                <span class="room-name">KGC-4.07-PR</span>
+                <span class="room-status" id="room-status-5">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-5">
                 
                 <li class="timeslot-item" id="room-5-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(5, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-5-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -448,18 +445,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-5-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(5, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-5-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-5-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-5-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(5, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-5-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -469,26 +466,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-5-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(5, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-6">
-            <div class="room-name">KGC-4.08-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-6">
+                <span class="room-name">KGC-4.08-PR</span>
+                <span class="room-status" id="room-status-6">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-6">
                 
                 <li class="timeslot-item" id="room-6-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(6, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-6-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -499,25 +488,25 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-6-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(6, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-6-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-10:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-6-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-6-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(6, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-6-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">10:00-18:00</span>
                             <span class="timeslot-status booked">booked</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Booking Time: 10:00-18:00
+                    <div class="details" id="details-6-2">Booking Time: 10:00-18:00
 Booking Status: Confirmed
 Booking Reference Number: BK-20250321-001711
 Booked for User Name: Philip HO Zhi Yang
@@ -528,7 +517,7 @@ Purpose of Booking: Libquest</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-6-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(6, 3)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-6-3" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -538,26 +527,18 @@ Purpose of Booking: Libquest</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-6-slot-4">
-                    <div class="timeslot-header" onclick="toggleDetails(6, 4)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-7">
-            <div class="room-name">KGC-4.09-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-7">
+                <span class="room-name">KGC-4.09-PR</span>
+                <span class="room-status" id="room-status-7">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-7">
                 
                 <li class="timeslot-item" id="room-7-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(7, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-7-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -568,18 +549,18 @@ Purpose of Booking: Libquest</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-7-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(7, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-7-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-7-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-7-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(7, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-7-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -589,26 +570,18 @@ Purpose of Booking: Libquest</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-7-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(7, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-8">
-            <div class="room-name">KGC-4.10-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-8">
+                <span class="room-name">KGC-4.10-PR</span>
+                <span class="room-status" id="room-status-8">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-8">
                 
                 <li class="timeslot-item" id="room-8-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(8, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-8-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -619,18 +592,18 @@ Purpose of Booking: Libquest</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-8-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(8, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-8-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-8-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-8-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(8, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-8-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -640,26 +613,18 @@ Purpose of Booking: Libquest</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-8-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(8, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-9">
-            <div class="room-name">KGC-4.11-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-9">
+                <span class="room-name">KGC-4.11-PR</span>
+                <span class="room-status" id="room-status-9">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-9">
                 
                 <li class="timeslot-item" id="room-9-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(9, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-9-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -670,25 +635,25 @@ Purpose of Booking: Libquest</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-9-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(9, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-9-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-08:30</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-9-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-9-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(9, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-9-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:30-18:00</span>
                             <span class="timeslot-status booked">booked</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Booking Time: 08:30-18:00
+                    <div class="details" id="details-9-2">Booking Time: 08:30-18:00
 Booking Status: Confirmed
 Booking Reference Number: BK-20250724-000216
 Booked for User Name: TAN Fu Wee
@@ -699,7 +664,7 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-9-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(9, 3)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-9-3" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -709,26 +674,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-9-slot-4">
-                    <div class="timeslot-header" onclick="toggleDetails(9, 4)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-10">
-            <div class="room-name">KGC-4.12-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-10">
+                <span class="room-name">KGC-4.12-PR</span>
+                <span class="room-status" id="room-status-10">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-10">
                 
                 <li class="timeslot-item" id="room-10-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(10, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-10-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -739,18 +696,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-10-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(10, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-10-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-10-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-10-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(10, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-10-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -760,26 +717,18 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-10-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(10, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
         <li class="room-item" id="room-11">
-            <div class="room-name">KGC-4.13-PR</div>
-            <ul class="timeslot-list">
+            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-11">
+                <span class="room-name">KGC-4.13-PR</span>
+                <span class="room-status" id="room-status-11">Loading...</span>
+            </div>
+            <ul class="timeslot-list" id="timeslots-11">
                 
                 <li class="timeslot-item" id="room-11-slot-0">
-                    <div class="timeslot-header" onclick="toggleDetails(11, 0)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-11-0" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">00:00-08:00</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -790,18 +739,18 @@ Purpose of Booking: interview</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-11-slot-1">
-                    <div class="timeslot-header" onclick="toggleDetails(11, 1)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-11-1" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">08:00-18:00</span>
                             <span class="timeslot-status free">free</span>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
                     </div>
-                    <div class="details">Room is free and available.</div>
+                    <div class="details" id="details-11-1">Room is free and available.</div>
                 </li>
                 
                 <li class="timeslot-item" id="room-11-slot-2">
-                    <div class="timeslot-header" onclick="toggleDetails(11, 2)" role="button" tabindex="0" aria-expanded="false">
+                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-11-2" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); toggleDetails(this);}">
                         <div>
                             <span class="timeslot-time">18:00-23:59</span>
                             <span class="timeslot-status not-available-due-to-timeslot">not available</span>
@@ -811,47 +760,509 @@ Purpose of Booking: interview</div>
                     
                 </li>
                 
-                <li class="timeslot-item" id="room-11-slot-3">
-                    <div class="timeslot-header" onclick="toggleDetails(11, 3)" role="button" tabindex="0" aria-expanded="false">
-                        <div>
-                            <span class="timeslot-time">23:59-24:00</span>
-                            <span class="timeslot-status free">free</span>
-                        </div>
-                        <button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>
-                    </div>
-                    <div class="details">Room is free and available.</div>
-                </li>
-                
             </ul>
         </li>
     
     </ul>
 
-    <script>
-        function toggleDetails(roomIdx, slotIdx) {
-            const slotId = 'room-' + roomIdx + '-slot-' + slotIdx;
-            const slotItem = document.getElementById(slotId);
-            const header = slotItem.querySelector('.timeslot-header');
-            const isExpanded = header.getAttribute('aria-expanded') === 'true';
-            if (isExpanded) {
-                header.setAttribute('aria-expanded', 'false');
-                slotItem.classList.remove('show');
+<script>
+    // Toggle room expansion (show/hide timeslots)
+    document.querySelectorAll('.room-summary').forEach(summary => {
+        summary.addEventListener('click', () => {
+            const roomItem = summary.parentElement;
+            const expanded = summary.getAttribute('aria-expanded') === 'true';
+
+            if (expanded) {
+                roomItem.classList.remove('expanded');
+                summary.setAttribute('aria-expanded', 'false');
             } else {
-                header.setAttribute('aria-expanded', 'true');
-                slotItem.classList.add('show');
+                roomItem.classList.add('expanded');
+                summary.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        // Accessibility: toggle on Enter or Space keys
+        summary.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                summary.click();
+            }
+        });
+    });
+
+    // Toggle details in timeslot items
+    function toggleDetails(element) {
+        const isExpanded = element.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+            element.setAttribute('aria-expanded', 'false');
+            element.parentElement.classList.remove('show-details');
+        } else {
+            element.setAttribute('aria-expanded', 'true');
+            element.parentElement.classList.add('show-details');
+        }
+    }
+
+    // Determine current local datetime
+    const now = new Date();
+    // Format as YYYY-MM-DD for date comparison
+    const pad = n => n.toString().padStart(2, '0');
+    const todayStr = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    // Function to convert HH:MM to minutes
+    function toMinutes(t) {
+        const [h, m] = t.split(':').map(Number);
+        return h * 60 + m;
+    }
+
+    // For each room, find current timeslot and update room status in summary
+    
+    (function() {
+        const roomIdx = 0;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
             }
         }
 
-        // Keyboard accessibility for timeslot headers
-        document.querySelectorAll('.timeslot-header').forEach(header => {
-            header.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    header.click();
-                }
-            });
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 1;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
         });
-    </script>
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 2;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 3;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 4;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 5;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 6;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 7;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 8;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 9;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 10;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+    (function() {
+        const roomIdx = 11;
+        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {
+            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
+            const statusEl = li.querySelector('.timeslot-status');
+            return {
+                timeslot: timeStr,
+                status: statusEl.textContent.trim(),
+            };
+        });
+
+        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
+
+        let matchedSlot = null;
+        for (const slot of timeslots) {
+            if (slot.timeslot === '23:59-24:00') continue; // ignore boundary slot
+            const [start, end] = slot.timeslot.split('-');
+            let startMin = toMinutes(start);
+            let endMin = toMinutes(end);
+            if (endMin === 0) endMin = 24 * 60;
+
+            if (startMin <= currentMinutes && currentMinutes < endMin) {
+                matchedSlot = slot;
+                break;
+            }
+        }
+
+        if (matchedSlot === null) {
+            roomStatusEl.textContent = 'No data';
+            roomStatusEl.className = 'room-status not-available';
+        } else {
+            roomStatusEl.textContent = matchedSlot.status;
+            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
+            roomStatusEl.className = 'room-status ' + cls;
+        }
+    })();
+    
+</script>
+
 </body>
 <footer class="custom-footer">
     <div>

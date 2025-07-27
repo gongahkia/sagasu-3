@@ -21,7 +21,7 @@ jobs:
           python-version: '3.11'
 
       - name: Run generate.py
-        run: python frontend/generate.py
+        run: cd frontend && python generate.py
 
       - name: Upload generated HTML (optional)
         uses: actions/upload-artifact@v3
