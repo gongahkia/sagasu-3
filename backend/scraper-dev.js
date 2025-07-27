@@ -274,6 +274,17 @@ const outputLog = './log/scraped_log.json';
   await frameContent.waitForSelector('input#DateBookingFrom_c1_textDate', { timeout: 20000 });
   await frameContent.click('input#DateBookingFrom_c1_textDate');
   const desiredDate = SCRAPE_CONFIG.date;
+  const initialDate = await frameContent.$eval(
+    'input#DateBookingFrom_c1_textDate',
+    el => el.value
+  );
+  if (initialDate === desiredDate) {
+    console.log(`LOG: Initial date already ${desiredDate}, clicking forward and backward once to refresh`);
+    await frameContent.click('a#BtnDpcNext');
+    await frameContent.waitForTimeout(500);
+    await frameContent.click('a#BtnDpcPrev');
+    await frameContent.waitForTimeout(500);
+  }
   for(let tries = 0; tries < 20; tries++) { 
     const currentDate = await frameContent.$eval(
       'input#DateBookingFrom_c1_textDate',
@@ -294,6 +305,11 @@ const outputLog = './log/scraped_log.json';
   if (finalDate !== desiredDate) {
     throw new Error(`ERROR: Could not reach desired date "${desiredDate}". Final date was: "${finalDate}"`);
   }
+  await frameContent.selectOption('select#TimeFrom_c1_ctl04', SCRAPE_CONFIG.startTime);
+  await frameContent.selectOption('select#TimeTo_c1_ctl04', SCRAPE_CONFIG.endTime);
+  console.log(`LOG: Set start and end time dropdowns to ${SCRAPE_CONFIG.startTime} and ${SCRAPE_CONFIG.endTime}`);
+  await frameContent.waitForTimeout(3000); 
+  console.log(`LOG: Forcing a timeout of 3000ms to allow the page to update`);
   await fbsPage.screenshot({ path: `${screenshotDir}/date_picker_debug.png`, fullPage: true });
 
   // 4. Set start and end time dropdowns
