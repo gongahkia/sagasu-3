@@ -40,8 +40,18 @@ jobs:
     - name: Run scraper script
       run: cd backend && node scraper-prod.js
 
-    - name: Upload log artifact
-      uses: actions/upload-artifact@v4
+    - name: Configure git for pushing
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit scraped_log.json if changed
+      run: |
+        git add backend/log/scraped_log.json
+        git diff --cached --quiet || git commit -m "Update scraped_log.json [skip ci]"
+
+    - name: Push changes to repository
+      uses: ad-m/github-push-action@v0.6.0
       with:
-        name: scraper-logs
-        path: backend/log/scraped_log.json
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref_name }}
