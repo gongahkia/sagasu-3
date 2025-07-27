@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-generate-py:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}   
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'  
+          python-version: '3.11'
 
       - name: Run generate.py
         run: python frontend/generate.py
+
+      - name: Upload generated HTML (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: generated-index-html
+          path: index.html
