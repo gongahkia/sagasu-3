@@ -24,8 +24,18 @@ jobs:
       - name: Run generate.py
         run: cd frontend && python generate.py
 
-      - name: Upload generated HTML
-        uses: actions/upload-artifact@v4
+      - name: Configure git for pushing
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit index.html if changed
+        run: |
+          git add index.html
+          git diff --cached --quiet || git commit -m "Auto-update index.html [skip ci]"
+
+      - name: Push changes to repository
+        uses: ad-m/github-push-action@v0.6.0
         with:
-          name: generated-index-html
-          path: index.html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
