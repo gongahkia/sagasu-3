@@ -1,18 +1,16 @@
 {
-  "timestamp": "2025-07-26T03:00:46.762Z",
-  "date": "30-Jul-2025",
+  "timestamp": "2025-07-27T04:10:46.711Z",
+  "date": "27-Jul-2025",
   "start_time": "10:00",
   "end_time": "17:00",
   "building_names": [
     "Yong Pung How School of Law/Kwa Geok Choo Law Library"
   ],
   "floor_names": [
-    "Level 3",
     "Level 4",
     "Level 5"
   ],
   "facility_types": [
-    "Group Study Room",
     "Project Room"
   ],
   "equipment": [
@@ -21,279 +19,144 @@
   "room_mappings": {
     "KGC-4.02-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-08:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "08:30-18:00",
-        "status": "booked",
-        "details": "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000217\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview"
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.03-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.04-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.05-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.06-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.07-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.08-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-10:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "10:00-18:00",
-        "status": "booked",
-        "details": "Booking Time: 10:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250321-001711\nBooked for User Name: Philip HO Zhi Yang\nBooked for User Org Unit: Instruction & Learning Services\nBooked for User Email Address: philipho@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Libquest"
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.09-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.10-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.11-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-08:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "08:30-18:00",
-        "status": "booked",
-        "details": "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000216\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview"
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.12-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.13-PR": [
       {
-        "timeslot": "00:00-08:00",
+        "timeslot": "00:00-00:00",
         "status": "not available due to timeslot",
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "18:00-23:59",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "23:59-24:00",
+        "timeslot": "00:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -314,32 +177,17 @@
     "KGC-4.13-PR"
   ],
   "raw_timeslots": [
-    "(00:00-08:00) (not available)",
-    "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000217\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "Booking Time: 10:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250321-001711\nBooked for User Name: Philip HO Zhi Yang\nBooked for User Org Unit: Instruction & Learning Services\nBooked for User Email Address: philipho@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Libquest",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000216\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)",
-    "(00:00-08:00) (not available)",
-    "(18:00-23:59) (not available)"
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)",
+    "(00:00-00:00) (not available)"
   ]
 }
