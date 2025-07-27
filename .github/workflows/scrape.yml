@@ -2,7 +2,7 @@ name: SMU Facility Booking Scraper
 
 on:
   schedule:
-    - cron: '0 1,7 * * *'
+    - cron: '0 1,4 * * *'
   workflow_dispatch: 
 
 jobs:
