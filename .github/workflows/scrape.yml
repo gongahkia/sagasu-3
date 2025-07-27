@@ -41,7 +41,7 @@ jobs:
       run: cd backend && node scraper-prod.js
 
     - name: Upload log artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: scraper-logs
         path: backend/log/scraped_log.json
