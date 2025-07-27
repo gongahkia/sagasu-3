@@ -14,7 +14,7 @@
     <img src="./asset/logo/three_logo.png" width=55% height=55%>
 </p>
 
-`Sagasu 3` is served as a [Web App](./.github/workflows/generate.yml), with a [scheduled scraper](./.github/workflows/scrape.yml) that runs daily at 9am and 12pm SGT.
+`Sagasu 3` is served as a [Web App](./.github/workflows/generate.yml), with a [scheduled scraper](./.github/workflows/scrape.yml) that runs daily at 9am and 12pm SGT per [this](#configuration) configuration.
 
 Access the ***Live Web App*** [here](#usage).
 
@@ -72,6 +72,12 @@ $ python3 lib/cli.py
 ```
 $ npx playwright install
 $ cd backend && npm i && node scraper-dev.js
+```
+
+## Configuration
+
+```env
+...
 ```
 
 ## Other notes
