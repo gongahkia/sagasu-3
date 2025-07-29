@@ -8,14 +8,14 @@
     <img src="./asset/logo/three_logo.png" width=55% height=55%>
 </p>
 
-`Sagasu 3` is served as a [Web App](./.github/workflows/generate.yml), with a [scheduled scraper](./.github/workflows/scrape.yml) that runs daily at 9am and 12pm SGT per [this](#configuration) configuration.
+`Sagasu 3` is served as a [Web App](./.github/workflows/generate.yml), with a [scheduled scraper](./.github/workflows/scrape.yml) that runs daily at varied times per [this configuration](#configuration).
 
 Access the ***Live Web App*** [here](#usage).
 
 ## Stack
 
 * *Frontend*: [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML), [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Github Pages Site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site)
-* *Backend*: [Playwright](https://github.com/microsoft/playwright), [Github Actions](https://docs.github.com/en/actions), [Node.js](https://nodejs.org/en)
+* *Backend*: [Playwright](https://github.com/microsoft/playwright), [Node.js](https://nodejs.org/en), [Github Actions](https://docs.github.com/en/actions), [Cron](https://www.ibm.com/docs/en/db2/11.5.x?topic=task-unix-cron-format)
 * *Script*: [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript), [Python](https://www.python.org/)
 
 ## Rationale
@@ -72,6 +72,18 @@ $ cd backend && npm i && node scraper-dev.js
 ```
 
 ## Configuration
+
+### Scraper schedule
+
+All these timeslots are in [SGT](https://www.timeanddate.com/time/zones/sgt) *([UTC+8](https://www.timeanddate.com/worldclock/timezone/utc8))* scheduled with [Cron](https://www.ibm.com/docs/en/db2/11.5.x?topic=task-unix-cron-format).
+
+* Monday 9am, 3pm
+* Tuesday 9am, 12pm
+* Wednesday 12pm
+* Thursday 9am, 12pm, 3pm
+* Friday 9am, 3pm
+
+### Room scraping configuration
 
 ```env
 SCRAPE_DATE=<current_day>
