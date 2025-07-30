@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-07-29T04:28:34.774Z",
-  "date": "29-Jul-2025",
+  "timestamp": "2025-07-30T04:20:38.525Z",
+  "date": "30-Jul-2025",
   "start_time": "10:00",
   "end_time": "17:00",
   "building_names": [
@@ -24,29 +24,14 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-09:00",
+        "timeslot": "08:00-08:30",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "09:00-12:00",
+        "timeslot": "08:30-18:00",
         "status": "booked",
-        "details": "Booking Time: 09:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250728-000010\nBooked for User Name: HANSEN LIM KE XUAN\nBooked for User Org Unit: \nBooked for User Email Address: hansen.lim.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: What?"
-      },
-      {
-        "timeslot": "12:00-13:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "13:30-16:30",
-        "status": "booked",
-        "details": "Booking Time: 13:30-16:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250728-000309\nBooked for User Name: YANG YU ROONG JUSTINE\nBooked for User Org Unit: \nBooked for User Email Address: justineyang.2021@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: breinz"
-      },
-      {
-        "timeslot": "16:30-18:00",
-        "status": "free",
-        "details": ""
+        "details": "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000217\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview"
       },
       {
         "timeslot": "18:00-23:59",
@@ -176,9 +161,14 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
+        "timeslot": "08:00-10:00",
         "status": "free",
         "details": ""
+      },
+      {
+        "timeslot": "10:00-18:00",
+        "status": "booked",
+        "details": "Booking Time: 10:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250321-001711\nBooked for User Name: Philip HO Zhi Yang\nBooked for User Org Unit: Instruction & Learning Services\nBooked for User Email Address: philipho@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Libquest"
       },
       {
         "timeslot": "18:00-23:59",
@@ -242,9 +232,14 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
+        "timeslot": "08:00-08:30",
         "status": "free",
         "details": ""
+      },
+      {
+        "timeslot": "08:30-18:00",
+        "status": "booked",
+        "details": "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000216\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview"
       },
       {
         "timeslot": "18:00-23:59",
@@ -318,8 +313,7 @@
   ],
   "raw_timeslots": [
     "(00:00-08:00) (not available)",
-    "Booking Time: 09:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250728-000010\nBooked for User Name: HANSEN LIM KE XUAN\nBooked for User Org Unit: \nBooked for User Email Address: hansen.lim.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: What?",
-    "Booking Time: 13:30-16:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250728-000309\nBooked for User Name: YANG YU ROONG JUSTINE\nBooked for User Org Unit: \nBooked for User Email Address: justineyang.2021@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: breinz",
+    "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000217\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
@@ -332,12 +326,14 @@
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
+    "Booking Time: 10:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250321-001711\nBooked for User Name: Philip HO Zhi Yang\nBooked for User Org Unit: Instruction & Learning Services\nBooked for User Email Address: philipho@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Libquest",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
+    "Booking Time: 08:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250724-000216\nBooked for User Name: TAN Fu Wee\nBooked for User Org Unit: Digital Marketing\nBooked for User Email Address: fwtan@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: interview",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
