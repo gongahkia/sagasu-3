@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-07-31T01:39:26.946Z",
+  "timestamp": "2025-07-31T04:26:56.568Z",
   "date": "31-Jul-2025",
   "start_time": "10:00",
   "end_time": "17:00",
@@ -151,7 +151,7 @@
       {
         "timeslot": "13:00-16:00",
         "status": "booked",
-        "details": "Booking Time: 13:00-16:00\nBooking Status: Pending Confirmation\nBooking Reference Number: MBK-20250722-000004\nBooked for User Name: NABIL BIN HANAFIAH\nBooked for User Org Unit: \nBooked for User Email Address: nabilh.2022@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Work"
+        "details": "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250722-000004\nBooked for User Name: NABIL BIN HANAFIAH\nBooked for User Org Unit: \nBooked for User Email Address: nabilh.2022@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Work"
       },
       {
         "timeslot": "16:00-18:00",
@@ -335,7 +335,7 @@
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 09:30-12:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250722-000073\nBooked for User Name: BLOSSOM VERA JEREMIAH\nBooked for User Org Unit: \nBooked for User Email Address: bvjeremiah.2021@economics.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: work",
-    "Booking Time: 13:00-16:00\nBooking Status: Pending Confirmation\nBooking Reference Number: MBK-20250722-000004\nBooked for User Name: NABIL BIN HANAFIAH\nBooked for User Org Unit: \nBooked for User Email Address: nabilh.2022@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Work",
+    "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250722-000004\nBooked for User Name: NABIL BIN HANAFIAH\nBooked for User Org Unit: \nBooked for User Email Address: nabilh.2022@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Work",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 10:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250321-001710\nBooked for User Name: Philip HO Zhi Yang\nBooked for User Org Unit: Instruction & Learning Services\nBooked for User Email Address: philipho@smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Libquest",
