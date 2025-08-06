@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-06T04:20:20.764Z",
+  "timestamp": "2025-08-06T04:28:56.516Z",
   "date": "06-Aug-2025",
   "start_time": "10:00",
   "end_time": "17:00",
@@ -90,7 +90,17 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
+        "timeslot": "08:00-12:30",
+        "status": "free",
+        "details": ""
+      },
+      {
+        "timeslot": "12:30-14:30",
+        "status": "booked",
+        "details": "Booking Time: 12:30-14:30\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250806-000383\nBooked for User Name: GABRIEL ONG ZHE MIAN\nBooked for User Org Unit: \nBooked for User Email Address: gabriel.ong.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: testing my scraper"
+      },
+      {
+        "timeslot": "14:30-18:00",
         "status": "free",
         "details": ""
       },
@@ -304,6 +314,7 @@
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
+    "Booking Time: 12:30-14:30\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250806-000383\nBooked for User Name: GABRIEL ONG ZHE MIAN\nBooked for User Org Unit: \nBooked for User Email Address: gabriel.ong.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: testing my scraper",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
