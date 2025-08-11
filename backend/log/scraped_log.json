@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-11T01:32:51.420Z",
+  "timestamp": "2025-08-11T07:06:56.202Z",
   "date": "11-Aug-2025",
   "start_time": "10:00",
   "end_time": "17:00",
@@ -144,14 +144,19 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-15:00",
+        "timeslot": "08:00-14:30",
         "status": "free",
         "details": ""
       },
       {
+        "timeslot": "14:30-15:00",
+        "status": "booked",
+        "details": "Booking Time: 14:30-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250811-000353\nBooked for User Name: CHUA JIA XUAN\nBooked for User Org Unit: \nBooked for User Email Address: jx.chua.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+      },
+      {
         "timeslot": "15:00-18:00",
         "status": "booked",
-        "details": "Booking Time: 15:00-18:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250810-000047\nBooked for User Name: ISAAC ONG BIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: isaac.ong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: anti human rights (legally this is a joke)"
+        "details": "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000047\nBooked for User Name: ISAAC ONG BIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: isaac.ong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: anti human rights (legally this is a joke)"
       },
       {
         "timeslot": "18:00-23:59",
@@ -324,7 +329,8 @@
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
-    "Booking Time: 15:00-18:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250810-000047\nBooked for User Name: ISAAC ONG BIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: isaac.ong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: anti human rights (legally this is a joke)",
+    "Booking Time: 14:30-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250811-000353\nBooked for User Name: CHUA JIA XUAN\nBooked for User Org Unit: \nBooked for User Email Address: jx.chua.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000047\nBooked for User Name: ISAAC ONG BIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: isaac.ong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: anti human rights (legally this is a joke)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
