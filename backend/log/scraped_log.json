@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-14T01:40:03.158Z",
+  "timestamp": "2025-08-14T07:11:49.951Z",
   "date": "14-Aug-2025",
   "start_time": "10:00",
   "end_time": "17:00",
@@ -98,17 +98,7 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-10:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "10:00-13:00",
-        "status": "booked",
-        "details": "Booking Time: 10:00-13:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000820\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: int"
-      },
-      {
-        "timeslot": "13:00-18:00",
+        "timeslot": "08:00-18:00",
         "status": "free",
         "details": ""
       },
@@ -130,7 +120,17 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-18:00",
+        "timeslot": "08:00-14:00",
+        "status": "free",
+        "details": ""
+      },
+      {
+        "timeslot": "14:00-17:00",
+        "status": "booked",
+        "details": "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000213\nBooked for User Name: BRIJESH BALAMURUGAN THIRUVENGADAM\nBooked for User Org Unit: \nBooked for User Email Address: brijeshbt.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: moot"
+      },
+      {
+        "timeslot": "17:00-18:00",
         "status": "free",
         "details": ""
       },
@@ -272,17 +272,7 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-11:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "11:00-14:00",
-        "status": "booked",
-        "details": "Booking Time: 11:00-14:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000812\nBooked for User Name: TRISHA-ANN TAN SHI EN\nBooked for User Org Unit: \nBooked for User Email Address: trisha.t.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry"
-      },
-      {
-        "timeslot": "14:00-18:00",
+        "timeslot": "08:00-18:00",
         "status": "free",
         "details": ""
       },
@@ -365,9 +355,9 @@
     "Booking Time: 11:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250813-000035\nBooked for User Name: LOH YIH XIANG\nBooked for User Org Unit: \nBooked for User Email Address: yihxiangloh.2025@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meeting",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
-    "Booking Time: 10:00-13:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000820\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: int",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
+    "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000213\nBooked for User Name: BRIJESH BALAMURUGAN THIRUVENGADAM\nBooked for User Org Unit: \nBooked for User Email Address: brijeshbt.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: moot",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250813-000276\nBooked for User Name: CHUA JIA XUAN\nBooked for User Org Unit: \nBooked for User Email Address: jx.chua.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
@@ -381,7 +371,6 @@
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
-    "Booking Time: 11:00-14:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000812\nBooked for User Name: TRISHA-ANN TAN SHI EN\nBooked for User Org Unit: \nBooked for User Email Address: trisha.t.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
