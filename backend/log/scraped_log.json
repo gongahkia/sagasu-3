@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-15T01:37:05.095Z",
+  "timestamp": "2025-08-15T07:09:31.479Z",
   "date": "15-Aug-2025",
   "start_time": "10:00",
   "end_time": "17:00",
@@ -66,27 +66,7 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-10:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "10:30-13:30",
-        "status": "booked",
-        "details": "Booking Time: 10:30-13:30\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000821\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: FT"
-      },
-      {
-        "timeslot": "13:30-14:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "14:00-17:00",
-        "status": "booked",
-        "details": "Booking Time: 14:00-17:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250815-000013\nBooked for User Name: LIANG JIOOI, LANCE\nBooked for User Org Unit: \nBooked for User Email Address: lance.liang.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: work"
-      },
-      {
-        "timeslot": "17:00-18:00",
+        "timeslot": "08:00-18:00",
         "status": "free",
         "details": ""
       },
@@ -160,9 +140,14 @@
         "details": "Booking Time: 11:00-14:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250814-000047\nBooked for User Name: CHRISCAVIN WIJAYA\nBooked for User Org Unit: \nBooked for User Email Address: c.wijaya.2023@cis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: wse"
       },
       {
-        "timeslot": "14:00-18:00",
+        "timeslot": "14:00-15:00",
         "status": "free",
         "details": ""
+      },
+      {
+        "timeslot": "15:00-18:00",
+        "status": "booked",
+        "details": "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250815-000008\nBooked for User Name: LEON LEE JIA XU\nBooked for User Org Unit: \nBooked for User Email Address: leon.lee.2023@cis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: nerd"
       },
       {
         "timeslot": "18:00-23:59",
@@ -224,7 +209,12 @@
         "details": "Booking Time: 11:00-14:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000735\nBooked for User Name: EMILY TAN XIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: emily.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: sleigh"
       },
       {
-        "timeslot": "14:00-18:00",
+        "timeslot": "14:00-17:00",
+        "status": "booked",
+        "details": "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000464\nBooked for User Name: WEI, LAI\nBooked for User Org Unit: \nBooked for User Email Address: lai.wei.2024@mpa.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+      },
+      {
+        "timeslot": "17:00-18:00",
         "status": "free",
         "details": ""
       },
@@ -402,8 +392,6 @@
     "Booking Time: 13:30-16:30\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250806-000006\nBooked for User Name: TAN WEI JUN, TERRIS\nBooked for User Org Unit: \nBooked for User Email Address: terris.tan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Hh",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
-    "Booking Time: 10:30-13:30\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250813-000821\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: FT",
-    "Booking Time: 14:00-17:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250815-000013\nBooked for User Name: LIANG JIOOI, LANCE\nBooked for User Org Unit: \nBooked for User Email Address: lance.liang.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: work",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 11:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000736\nBooked for User Name: JOY LIEW EN LE\nBooked for User Org Unit: \nBooked for User Email Address: joy.liew.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
@@ -411,12 +399,14 @@
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 11:00-14:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250814-000047\nBooked for User Name: CHRISCAVIN WIJAYA\nBooked for User Org Unit: \nBooked for User Email Address: c.wijaya.2023@cis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: wse",
+    "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250815-000008\nBooked for User Name: LEON LEE JIA XU\nBooked for User Org Unit: \nBooked for User Email Address: leon.lee.2023@cis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: nerd",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 09:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000697\nBooked for User Name: ZAVIER WU YU\nBooked for User Org Unit: \nBooked for User Email Address: zavierwu.2022@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: J",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "Booking Time: 11:00-14:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000735\nBooked for User Name: EMILY TAN XIN HUI\nBooked for User Org Unit: \nBooked for User Email Address: emily.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: sleigh",
+    "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000464\nBooked for User Name: WEI, LAI\nBooked for User Org Unit: \nBooked for User Email Address: lai.wei.2024@mpa.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
     "(18:00-23:59) (not available)",
     "(00:00-08:00) (not available)",
     "(18:00-23:59) (not available)",
