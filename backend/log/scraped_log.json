@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-08-18T07:06:15.849Z",
-  "date": "18-Aug-2025",
+  "timestamp": "2025-08-19T01:38:23.643Z",
+  "date": "19-Aug-2025",
   "start_time": "10:00",
   "end_time": "17:00",
   "building_names": [
@@ -24,14 +24,24 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:30",
+        "timeslot": "08:00-10:00",
+        "status": "free",
+        "details": ""
+      },
+      {
+        "timeslot": "10:00-12:00",
+        "status": "booked",
+        "details": "Booking Time: 10:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000753\nBooked for User Name: TAN WEI JUN, TERRIS\nBooked for User Org Unit: \nBooked for User Email Address: terris.tan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: death"
+      },
+      {
+        "timeslot": "12:00-12:30",
         "status": "free",
         "details": ""
       },
       {
         "timeslot": "12:30-15:30",
         "status": "booked",
-        "details": "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250817-000025\nBooked for User Name: LAW YICK YUAN\nBooked for User Org Unit: \nBooked for User Email Address: yy.law.2024@computing.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Yummy"
+        "details": "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000678\nBooked for User Name: SHERMAN WAN SI EN\nBooked for User Org Unit: \nBooked for User Email Address: sherman.wan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: fly away"
       },
       {
         "timeslot": "15:30-16:00",
@@ -39,12 +49,12 @@
         "details": ""
       },
       {
-        "timeslot": "16:00-18:30",
+        "timeslot": "16:00-19:00",
         "status": "booked",
-        "details": "Booking Time: 16:00-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000673\nBooked for User Name: SHERMAN WAN SI EN\nBooked for User Org Unit: \nBooked for User Email Address: sherman.wan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meow"
+        "details": "Booking Time: 16:00-19:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250819-000036\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: LMS"
       },
       {
-        "timeslot": "18:30-24:00",
+        "timeslot": "19:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -56,42 +66,54 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:00",
+        "timeslot": "08:00-10:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "12:00-15:00",
+        "timeslot": "10:00-11:30",
         "status": "booked",
-        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250807-000391\nBooked for User Name: NG YAN ZHE CALVERT\nBooked for User Org Unit: \nBooked for User Email Address: calvert.ng.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: im1 :("
+        "details": "Booking Time: 10:00-11:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000193\nBooked for User Name: LE YEN NHI\nBooked for User Org Unit: \nBooked for User Email Address: yennhi.le.2025@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
       },
       {
-        "timeslot": "15:00-15:30",
+        "timeslot": "11:30-13:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "15:30-18:30",
+        "timeslot": "13:00-16:00",
         "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000033\nBooked for User Name: TAN MING JUN CALEB\nBooked for User Org Unit: \nBooked for User Email Address: caleb.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+        "details": "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000965\nBooked for User Name: QIAN, YITAO\nBooked for User Org Unit: \nBooked for User Email Address: yitao.qian.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Group study"
       },
       {
-        "timeslot": "18:30-19:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "19:00-21:30",
-        "status": "booked",
-        "details": "Booking Time: 19:00-21:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000022\nBooked for User Name: RAJPREET SINGH S/O SUCKPAL SINGH\nBooked for User Org Unit: \nBooked for User Email Address: rajpreet.ss.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: mugging"
-      },
-      {
-        "timeslot": "21:30-24:00",
+        "timeslot": "16:00-24:00",
         "status": "free",
         "details": ""
       }
     ],
     "KGC-4.04-PR": [
+      {
+        "timeslot": "00:00-08:00",
+        "status": "not available due to timeslot",
+        "details": ""
+      },
+      {
+        "timeslot": "08:00-14:30",
+        "status": "free",
+        "details": ""
+      },
+      {
+        "timeslot": "14:30-17:30",
+        "status": "booked",
+        "details": "Booking Time: 14:30-17:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250811-000664\nBooked for User Name: EMMA OH\nBooked for User Org Unit: \nBooked for User Email Address: emma.oh.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meeting"
+      },
+      {
+        "timeslot": "17:30-24:00",
+        "status": "free",
+        "details": ""
+      }
+    ],
+    "KGC-4.05-PR": [
       {
         "timeslot": "00:00-08:00",
         "status": "not available due to timeslot",
@@ -105,62 +127,20 @@
       {
         "timeslot": "10:00-13:00",
         "status": "booked",
-        "details": "Booking Time: 10:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000226\nBooked for User Name: BHARADWAJ AKASH VIJAY\nBooked for User Org Unit: \nBooked for User Email Address: akash.b.2024@computing.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: SMU Fintech"
+        "details": "Booking Time: 10:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000025\nBooked for User Name: TAN YU YOU\nBooked for User Org Unit: \nBooked for User Email Address: yuyou.tan.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Study"
       },
       {
-        "timeslot": "13:00-16:00",
-        "status": "booked",
-        "details": "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000223\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: FT"
-      },
-      {
-        "timeslot": "16:00-18:00",
-        "status": "booked",
-        "details": "Booking Time: 16:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000722\nBooked for User Name: LIM ZE YUEN\nBooked for User Org Unit: \nBooked for User Email Address: zeyuen.lim.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry"
-      },
-      {
-        "timeslot": "18:00-24:00",
-        "status": "free",
-        "details": ""
-      }
-    ],
-    "KGC-4.05-PR": [
-      {
-        "timeslot": "00:00-08:00",
-        "status": "not available due to timeslot",
-        "details": ""
-      },
-      {
-        "timeslot": "08:00-08:30",
+        "timeslot": "13:00-13:30",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "08:30-11:30",
+        "timeslot": "13:30-16:30",
         "status": "booked",
-        "details": "Booking Time: 08:30-11:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000629\nBooked for User Name: TRINH THI NHU Y\nBooked for User Org Unit: \nBooked for User Email Address: tny.trinh.2025@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Group study"
+        "details": "Booking Time: 13:30-16:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000023\nBooked for User Name: RAJPREET SINGH S/O SUCKPAL SINGH\nBooked for User Org Unit: \nBooked for User Email Address: rajpreet.ss.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: austin if u read this give me a sign"
       },
       {
-        "timeslot": "11:30-12:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "12:00-15:00",
-        "status": "booked",
-        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000289\nBooked for User Name: YONG SHAO-ERN, DARRYL\nBooked for User Org Unit: \nBooked for User Email Address: darryl.yong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "15:00-15:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "15:30-18:30",
-        "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000408\nBooked for User Name: KYRAN MARIEL NARAYANAN\nBooked for User Org Unit: \nBooked for User Email Address: kyranm.n.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "18:30-24:00",
+        "timeslot": "16:30-24:00",
         "status": "free",
         "details": ""
       }
@@ -172,27 +152,27 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:00",
+        "timeslot": "08:00-09:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "12:00-15:00",
+        "timeslot": "09:00-12:00",
         "status": "booked",
-        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250807-000497\nBooked for User Name: KIO KAI TING\nBooked for User Org Unit: \nBooked for User Email Address: kaiting.kio.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Exam"
+        "details": "Booking Time: 09:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000156\nBooked for User Name: CHEW YUE BIN\nBooked for User Org Unit: \nBooked for User Email Address: yuebin.chew.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: /"
       },
       {
-        "timeslot": "15:00-15:30",
+        "timeslot": "12:00-13:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "15:30-18:30",
+        "timeslot": "13:00-16:00",
         "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250816-000050\nBooked for User Name: RACHEL KHONG KAI YUN\nBooked for User Org Unit: \nBooked for User Email Address: rachelkhong.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+        "details": "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000697\nBooked for User Name: ZHANG, KEXIN\nBooked for User Org Unit: \nBooked for User Email Address: kexin.zhang.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study group"
       },
       {
-        "timeslot": "18:30-24:00",
+        "timeslot": "16:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -204,24 +184,14 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "12:00-15:00",
-        "status": "booked",
-        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000094\nBooked for User Name: GUAI LI XUAN\nBooked for User Org Unit: \nBooked for User Email Address: lixuan.guai.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "15:00-15:30",
+        "timeslot": "08:00-15:30",
         "status": "free",
         "details": ""
       },
       {
         "timeslot": "15:30-18:30",
         "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000001\nBooked for User Name: YEO SOK HIANG, DENISE\nBooked for User Org Unit: \nBooked for User Email Address: denise.yeo.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry"
+        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250805-000002\nBooked for User Name: YEO SOK HIANG, DENISE\nBooked for User Org Unit: \nBooked for User Email Address: denise.yeo.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: -"
       },
       {
         "timeslot": "18:30-24:00",
@@ -236,27 +206,17 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-10:30",
+        "timeslot": "08:00-14:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "10:30-13:30",
+        "timeslot": "14:00-17:00",
         "status": "booked",
-        "details": "Booking Time: 10:30-13:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000025\nBooked for User Name: YEO FU XUAN JOYCE\nBooked for User Org Unit: \nBooked for User Email Address: joyce.yeo.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: ."
+        "details": "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-001210\nBooked for User Name: CHINCHOLKAR VEDANT RAVIKIRAN\nBooked for User Org Unit: \nBooked for User Email Address: vedantrc.2023@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meow"
       },
       {
-        "timeslot": "13:30-15:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "15:30-18:30",
-        "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250816-000203\nBooked for User Name: ALINA TAN XUAN YUN\nBooked for User Org Unit: \nBooked for User Email Address: alina.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "18:30-24:00",
+        "timeslot": "17:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -268,22 +228,7 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:00",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "12:00-15:00",
-        "status": "booked",
-        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000647\nBooked for User Name: CHLOE CHIA XIN YING\nBooked for User Org Unit: \nBooked for User Email Address: chloe.chia.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "15:00-18:00",
-        "status": "booked",
-        "details": "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000650\nBooked for User Name: YET YONG HUI, MAVIS\nBooked for User Org Unit: \nBooked for User Email Address: mavis.yet.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
-      },
-      {
-        "timeslot": "18:00-24:00",
+        "timeslot": "08:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -295,27 +240,7 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-11:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "11:30-14:30",
-        "status": "booked",
-        "details": "Booking Time: 11:30-14:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000155\nBooked for User Name: CHANG SAN YING\nBooked for User Org Unit: \nBooked for User Email Address: sy.chang.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: -"
-      },
-      {
-        "timeslot": "14:30-15:30",
-        "status": "free",
-        "details": ""
-      },
-      {
-        "timeslot": "15:30-18:00",
-        "status": "booked",
-        "details": "Booking Time: 15:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250817-000017\nBooked for User Name: BLOSSOM VERA JEREMIAH\nBooked for User Org Unit: \nBooked for User Email Address: bvjeremiah.2021@economics.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Spanish"
-      },
-      {
-        "timeslot": "18:00-24:00",
+        "timeslot": "08:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -334,15 +259,10 @@
       {
         "timeslot": "14:00-17:00",
         "status": "booked",
-        "details": "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000253\nBooked for User Name: LEE ZHI NING DAWN\nBooked for User Org Unit: \nBooked for User Email Address: dawn.lee.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meeting"
+        "details": "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000997\nBooked for User Name: HONG SHIQING, NATALIE\nBooked for User Org Unit: \nBooked for User Email Address: sq.hong.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
       },
       {
-        "timeslot": "17:00-20:00",
-        "status": "booked",
-        "details": "Booking Time: 17:00-20:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000503\nBooked for User Name: MUHAMMAD AL-MALIKI BIN MULYANI\nBooked for User Org Unit: \nBooked for User Email Address: muhammadm.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: bismillah"
-      },
-      {
-        "timeslot": "20:00-24:00",
+        "timeslot": "17:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -354,17 +274,17 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-14:30",
+        "timeslot": "08:00-12:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "14:30-17:30",
+        "timeslot": "12:00-15:00",
         "status": "booked",
-        "details": "Booking Time: 14:30-17:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000774\nBooked for User Name: FAM JIAHUI\nBooked for User Org Unit: \nBooked for User Email Address: jiahui.fam.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: huh"
+        "details": "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000775\nBooked for User Name: FAM JIAHUI\nBooked for User Org Unit: \nBooked for User Email Address: jiahui.fam.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: poopoo"
       },
       {
-        "timeslot": "17:30-24:00",
+        "timeslot": "15:00-24:00",
         "status": "free",
         "details": ""
       }
@@ -376,19 +296,24 @@
         "details": ""
       },
       {
-        "timeslot": "08:00-12:30",
+        "timeslot": "08:00-10:00",
         "status": "free",
         "details": ""
       },
       {
-        "timeslot": "12:30-15:30",
+        "timeslot": "10:00-12:00",
         "status": "booked",
-        "details": "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000329\nBooked for User Name: PEK LAYNE\nBooked for User Org Unit: \nBooked for User Email Address: layne.pek.2022@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: drink soup"
+        "details": "Booking Time: 10:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250819-000015\nBooked for User Name: RYAN ANG WAN WEN\nBooked for User Org Unit: \nBooked for User Email Address: ryan.ang.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+      },
+      {
+        "timeslot": "12:00-15:30",
+        "status": "free",
+        "details": ""
       },
       {
         "timeslot": "15:30-18:30",
         "status": "booked",
-        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000112\nBooked for User Name: OLIVIA YEO XUE-YIN\nBooked for User Org Unit: \nBooked for User Email Address: olivia.yeo.2023@socsc.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+        "details": "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000260\nBooked for User Name: SETH AURELIUS CHAN KIAT\nBooked for User Org Unit: \nBooked for User Email Address: seth.chan.2023@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Meeting"
       },
       {
         "timeslot": "18:30-24:00",
@@ -413,42 +338,32 @@
   ],
   "raw_timeslots": [
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250817-000025\nBooked for User Name: LAW YICK YUAN\nBooked for User Org Unit: \nBooked for User Email Address: yy.law.2024@computing.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Yummy",
-    "Booking Time: 16:00-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000673\nBooked for User Name: SHERMAN WAN SI EN\nBooked for User Org Unit: \nBooked for User Email Address: sherman.wan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meow",
+    "Booking Time: 10:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000753\nBooked for User Name: TAN WEI JUN, TERRIS\nBooked for User Org Unit: \nBooked for User Email Address: terris.tan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: death",
+    "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000678\nBooked for User Name: SHERMAN WAN SI EN\nBooked for User Org Unit: \nBooked for User Email Address: sherman.wan.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: fly away",
+    "Booking Time: 16:00-19:00\nBooking Status: Pending Confirmation\nBooking Reference Number: BK-20250819-000036\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: LMS",
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250807-000391\nBooked for User Name: NG YAN ZHE CALVERT\nBooked for User Org Unit: \nBooked for User Email Address: calvert.ng.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: im1 :(",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000033\nBooked for User Name: TAN MING JUN CALEB\nBooked for User Org Unit: \nBooked for User Email Address: caleb.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
-    "Booking Time: 19:00-21:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000022\nBooked for User Name: RAJPREET SINGH S/O SUCKPAL SINGH\nBooked for User Org Unit: \nBooked for User Email Address: rajpreet.ss.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: mugging",
+    "Booking Time: 10:00-11:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000193\nBooked for User Name: LE YEN NHI\nBooked for User Org Unit: \nBooked for User Email Address: yennhi.le.2025@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000965\nBooked for User Name: QIAN, YITAO\nBooked for User Org Unit: \nBooked for User Email Address: yitao.qian.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Group study",
     "(00:00-08:00) (not available)",
-    "Booking Time: 10:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000226\nBooked for User Name: BHARADWAJ AKASH VIJAY\nBooked for User Org Unit: \nBooked for User Email Address: akash.b.2024@computing.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: SMU Fintech",
-    "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000223\nBooked for User Name: JASDEV SINGH\nBooked for User Org Unit: \nBooked for User Email Address: jasdevsingh.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: FT",
-    "Booking Time: 16:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000722\nBooked for User Name: LIM ZE YUEN\nBooked for User Org Unit: \nBooked for User Email Address: zeyuen.lim.2023@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry",
+    "Booking Time: 14:30-17:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250811-000664\nBooked for User Name: EMMA OH\nBooked for User Org Unit: \nBooked for User Email Address: emma.oh.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meeting",
     "(00:00-08:00) (not available)",
-    "Booking Time: 08:30-11:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250814-000629\nBooked for User Name: TRINH THI NHU Y\nBooked for User Org Unit: \nBooked for User Email Address: tny.trinh.2025@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Group study",
-    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000289\nBooked for User Name: YONG SHAO-ERN, DARRYL\nBooked for User Org Unit: \nBooked for User Email Address: darryl.yong.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250815-000408\nBooked for User Name: KYRAN MARIEL NARAYANAN\nBooked for User Org Unit: \nBooked for User Email Address: kyranm.n.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 10:00-13:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000025\nBooked for User Name: TAN YU YOU\nBooked for User Org Unit: \nBooked for User Email Address: yuyou.tan.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Study",
+    "Booking Time: 13:30-16:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250810-000023\nBooked for User Name: RAJPREET SINGH S/O SUCKPAL SINGH\nBooked for User Org Unit: \nBooked for User Email Address: rajpreet.ss.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: austin if u read this give me a sign",
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250807-000497\nBooked for User Name: KIO KAI TING\nBooked for User Org Unit: \nBooked for User Email Address: kaiting.kio.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Exam",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250816-000050\nBooked for User Name: RACHEL KHONG KAI YUN\nBooked for User Org Unit: \nBooked for User Email Address: rachelkhong.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 09:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000156\nBooked for User Name: CHEW YUE BIN\nBooked for User Org Unit: \nBooked for User Email Address: yuebin.chew.2024@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: /",
+    "Booking Time: 13:00-16:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000697\nBooked for User Name: ZHANG, KEXIN\nBooked for User Org Unit: \nBooked for User Email Address: kexin.zhang.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study group",
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000094\nBooked for User Name: GUAI LI XUAN\nBooked for User Org Unit: \nBooked for User Email Address: lixuan.guai.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000001\nBooked for User Name: YEO SOK HIANG, DENISE\nBooked for User Org Unit: \nBooked for User Email Address: denise.yeo.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: cry",
+    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250805-000002\nBooked for User Name: YEO SOK HIANG, DENISE\nBooked for User Org Unit: \nBooked for User Email Address: denise.yeo.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: -",
     "(00:00-08:00) (not available)",
-    "Booking Time: 10:30-13:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000025\nBooked for User Name: YEO FU XUAN JOYCE\nBooked for User Org Unit: \nBooked for User Email Address: joyce.yeo.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: .",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250816-000203\nBooked for User Name: ALINA TAN XUAN YUN\nBooked for User Org Unit: \nBooked for User Email Address: alina.tan.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-001210\nBooked for User Name: CHINCHOLKAR VEDANT RAVIKIRAN\nBooked for User Org Unit: \nBooked for User Email Address: vedantrc.2023@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meow",
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000647\nBooked for User Name: CHLOE CHIA XIN YING\nBooked for User Org Unit: \nBooked for User Email Address: chloe.chia.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
-    "Booking Time: 15:00-18:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250804-000650\nBooked for User Name: YET YONG HUI, MAVIS\nBooked for User Org Unit: \nBooked for User Email Address: mavis.yet.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
     "(00:00-08:00) (not available)",
-    "Booking Time: 11:30-14:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000155\nBooked for User Name: CHANG SAN YING\nBooked for User Org Unit: \nBooked for User Email Address: sy.chang.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: -",
-    "Booking Time: 15:30-18:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250817-000017\nBooked for User Name: BLOSSOM VERA JEREMIAH\nBooked for User Org Unit: \nBooked for User Email Address: bvjeremiah.2021@economics.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Spanish",
     "(00:00-08:00) (not available)",
-    "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000253\nBooked for User Name: LEE ZHI NING DAWN\nBooked for User Org Unit: \nBooked for User Email Address: dawn.lee.2023@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: meeting",
-    "Booking Time: 17:00-20:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000503\nBooked for User Name: MUHAMMAD AL-MALIKI BIN MULYANI\nBooked for User Org Unit: \nBooked for User Email Address: muhammadm.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: bismillah",
+    "Booking Time: 14:00-17:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000997\nBooked for User Name: HONG SHIQING, NATALIE\nBooked for User Org Unit: \nBooked for User Email Address: sq.hong.2024@jd.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
     "(00:00-08:00) (not available)",
-    "Booking Time: 14:30-17:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000774\nBooked for User Name: FAM JIAHUI\nBooked for User Org Unit: \nBooked for User Email Address: jiahui.fam.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: huh",
+    "Booking Time: 12:00-15:00\nBooking Status: Confirmed\nBooking Reference Number: BK-20250812-000775\nBooked for User Name: FAM JIAHUI\nBooked for User Org Unit: \nBooked for User Email Address: jiahui.fam.2024@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: poopoo",
     "(00:00-08:00) (not available)",
-    "Booking Time: 12:30-15:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250817-000329\nBooked for User Name: PEK LAYNE\nBooked for User Org Unit: \nBooked for User Email Address: layne.pek.2022@law.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: drink soup",
-    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000112\nBooked for User Name: OLIVIA YEO XUE-YIN\nBooked for User Org Unit: \nBooked for User Email Address: olivia.yeo.2023@socsc.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study"
+    "Booking Time: 10:00-12:00\nBooking Status: Confirmed\nBooking Reference Number: MBK-20250819-000015\nBooked for User Name: RYAN ANG WAN WEN\nBooked for User Org Unit: \nBooked for User Email Address: ryan.ang.2022@scis.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: study",
+    "Booking Time: 15:30-18:30\nBooking Status: Confirmed\nBooking Reference Number: BK-20250818-000260\nBooked for User Name: SETH AURELIUS CHAN KIAT\nBooked for User Org Unit: \nBooked for User Email Address: seth.chan.2023@business.smu.edu.sg\nUse Type: AdHoc\nPurpose of Booking: Meeting"
   ]
 }
