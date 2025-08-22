@@ -1,6 +1,9 @@
-[![](https://img.shields.io/badge/sagasu_3.0.0-passing-green)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
+[![](https://img.shields.io/badge/sagasu_3.0.0-deployment_down-orange)](https://github.com/gongahkia/sagasu-3/releases/tag/1.0.0)
 ![](https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg)
 ![](https://github.com/gongahkia/sagasu-3/actions/workflows/generate.yml/badge.svg)
+
+> [!WARNING]  
+> [`Sagasu 3`](https://github.com/gongahkia/sagasu-3)'s Github Pages deployment is inactive as of 22 August 2025.  
 
 # `Sagasu 3`
 
