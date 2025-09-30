@@ -32,17 +32,30 @@ def load_scraped_log(filename):
 def generate_html(data):
     scrape_date = data.get('date', 'N/A')
     scrape_time_range = f"{data.get('start_time', 'N/A')} - {data.get('end_time', 'N/A')}"
+    timestamp = data.get('timestamp', '')
+    
+    # Parse timestamp for last updated
+    try:
+        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        last_updated = dt.strftime('%B %d, %Y at %I:%M %p UTC')
+    except:
+        last_updated = 'Unknown'
 
     rooms = []
+    total_rooms = 0
+    free_rooms = 0
+    
     for room, slots in data['room_mappings'].items():
         # Filter out timeslots of 23:59-24:00
         filtered_slots = [slot for slot in slots if slot['timeslot'] != '23:59-24:00' and slot['timeslot'] != '00:00-24:00']
 
         timeslots = []
+        room_currently_free = False
+        
         for slot in filtered_slots:
             details_text = slot.get('details', '')
             if slot['status'] == 'free' and not details_text.strip():
-                details_text = 'Room is free and available.'
+                details_text = 'Room is free and available for booking.'
 
             timeslots.append({
                 'timeslot': slot['timeslot'],
@@ -50,337 +63,1052 @@ def generate_html(data):
                 'details': details_text,
             })
 
+        # Determine current status for stats
+        current_min = current_minutes()
+        current_slot = find_current_timeslot(timeslots, current_min)
+        if current_slot and current_slot['status'] == 'free':
+            room_currently_free = True
+            free_rooms += 1
+        
+        total_rooms += 1
+
         rooms.append({
             'room': room,
-            'timeslots': timeslots
+            'timeslots': timeslots,
+            'currently_free': room_currently_free
         })
+
+    # Sort rooms by name for consistency
+    rooms.sort(key=lambda x: x['room'])
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sagasu 3</title>
+    <title>Sagasu 3 - SMU Room Finder</title>
     <link rel="icon" type="image/x-icon" href="three_logo.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-                         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            margin: 0; padding: 1rem; background: #f9f9f9; color: #222;
+        :root {{
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7f6f3;
+            --bg-tertiary: #f1f1ef;
+            --text-primary: #37352f;
+            --text-secondary: #6f6e69;
+            --text-tertiary: #9b9a97;
+            --border-light: #e9e9e7;
+            --border-medium: #d3d1cb;
+            --accent-blue: #2383e2;
+            --accent-blue-light: #e7f3ff;
+            --accent-green: #0f7b0f;
+            --accent-green-light: #e6fffa;
+            --accent-red: #e03e3e;
+            --accent-red-light: #ffeaea;
+            --accent-orange: #d9730d;
+            --accent-orange-light: #fdf2e9;
+            --shadow-light: 0 1px 3px rgba(15, 15, 15, 0.1);
+            --shadow-medium: 0 4px 12px rgba(15, 15, 15, 0.15);
+            --shadow-heavy: 0 8px 25px rgba(15, 15, 15, 0.15);
+            --radius-small: 6px;
+            --radius-medium: 8px;
+            --radius-large: 12px;
         }}
-        h1 {{
-            font-weight: 600;
-            margin-bottom: 0.25em;
-        }}
-        .meta {{
-            color: #555;
-            font-size: 0.9rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }}
-        .meta-header {{
-            margin-bottom: 1.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }}
-        .workflows {{
-            color: #555;
-            font-size: 0.9rem;
-            max-width: 600px;
-            margin-top: 1.5rem;
-            margin-left: auto;
-            margin-right: auto;
-        }}
-        .room-list {{
-            list-style: none;
-            padding: 0;
-            max-width: 700px;
-            margin: auto;
-        }}
-        .room-item {{
-            background: #fff;
-            margin-bottom: 1.5rem;
-            border-radius: 6px;
-            box-shadow: 0 1px 8px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }}
-        .room-summary {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            user-select: none;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #0078d4;
-            background: #e5f1fb;
-        }}
-        .room-status {{
-            font-weight: 600;
-            font-style: italic;
-            text-transform: capitalize;
-            color: #555;
-            margin-left: 1rem;
-            display: flex;
-            align-items: center;
-            font-size: 1rem;
-        }}
-        .room-status.free {{
-            color: #188038;
-        }}
-        .room-status.booked {{
-            color: #d13438;
-        }}
-        .room-status.not-available {{
-            color: #999;
-        }}
-        .timeslot-list {{
-            list-style: none;
-            padding-left: 1.5rem;
+
+        * {{
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+
+        body {{
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+        }}
+
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }}
+
+        /* Header */
+        .header {{
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            padding: 24px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }}
+
+        .header-content {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }}
+
+        .logo-section {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }}
+
+        .logo {{
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-blue), #4dabf7);
+            border-radius: var(--radius-small);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }}
+
+        .title {{
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }}
+
+        .subtitle {{
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }}
+
+        .header-actions {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }}
+
+        .status-badge {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--accent-green-light);
+            color: var(--accent-green);
+            border-radius: var(--radius-small);
+            font-size: 12px;
+            font-weight: 500;
+        }}
+
+        .status-dot {{
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }}
+
+        @keyframes pulse {{
+            0%, 100% {{ opacity: 1; }}
+            50% {{ opacity: 0.5; }}
+        }}
+
+        /* Stats Section */
+        .stats-section {{
+            padding: 32px 0;
+        }}
+
+        .stats-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }}
+
+        .stat-card {{
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-large);
+            padding: 24px;
+            box-shadow: var(--shadow-light);
+            transition: all 0.2s ease;
+        }}
+
+        .stat-card:hover {{
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }}
+
+        .stat-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }}
+
+        .stat-title {{
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }}
+
+        .stat-icon {{
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-small);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }}
+
+        .stat-value {{
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }}
+
+        .stat-description {{
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }}
+
+        .stat-free .stat-icon {{
+            background: var(--accent-green-light);
+            color: var(--accent-green);
+        }}
+
+        .stat-total .stat-icon {{
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+        }}
+
+        .stat-updated .stat-icon {{
+            background: var(--accent-orange-light);
+            color: var(--accent-orange);
+        }}
+
+        /* Filters */
+        .filters-section {{
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-large);
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+        }}
+
+        .filters-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }}
+
+        .filters-title {{
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }}
+
+        .filters-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }}
+
+        .filter-group {{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }}
+
+        .filter-buttons {{
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }}
+
+        .filter-btn {{
+            padding: 6px 12px;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-small);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }}
+
+        .filter-btn:hover {{
+            background: var(--bg-primary);
+            border-color: var(--accent-blue);
+        }}
+
+        .filter-btn.active {{
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }}
+
+        /* Room Grid */
+        .rooms-section {{
+            padding-bottom: 48px;
+        }}
+
+        .rooms-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }}
+
+        .rooms-title {{
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }}
+
+        .view-toggle {{
+            display: flex;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-small);
+            padding: 2px;
+        }}
+
+        .view-btn {{
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }}
+
+        .view-btn.active {{
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-light);
+        }}
+
+        .rooms-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }}
+
+        .room-card {{
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-large);
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }}
+
+        .room-card:hover {{
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-4px);
+            border-color: var(--accent-blue);
+        }}
+
+        .room-card.expanded {{
+            transform: none;
+        }}
+
+        .room-header {{
+            padding: 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+
+        .room-info {{
+            flex: 1;
+        }}
+
+        .room-name {{
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }}
+
+        .room-status {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }}
+
+        .status-indicator {{
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }}
+
+        .room-status.free {{
+            color: var(--accent-green);
+        }}
+
+        .room-status.free .status-indicator {{
+            background: var(--accent-green);
+        }}
+
+        .room-status.booked {{
+            color: var(--accent-red);
+        }}
+
+        .room-status.booked .status-indicator {{
+            background: var(--accent-red);
+        }}
+
+        .room-status.not-available {{
+            color: var(--text-tertiary);
+        }}
+
+        .room-status.not-available .status-indicator {{
+            background: var(--text-tertiary);
+        }}
+
+        .expand-btn {{
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-small);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }}
+
+        .expand-btn:hover {{
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }}
+
+        .room-card.expanded .expand-btn {{
+            transform: rotate(180deg);
+        }}
+
+        .room-details {{
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
-            font-size: 0.95rem;
         }}
-        .room-item.expanded .timeslot-list {{
-            max-height: 1000px; /* big enough to show contents */
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-            overflow: visible;
+
+        .room-card.expanded .room-details {{
+            max-height: 1000px;
         }}
+
+        .timeslots-list {{
+            padding: 0;
+        }}
+
         .timeslot-item {{
-            border-top: 1px solid #eee;
-            padding: 0.5rem 0;
-        }}
-        .timeslot-header {{
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }}
-        .timeslot-time {{
-            font-weight: 600;
-            color: #333;
-        }}
-        .timeslot-status {{
-            font-weight: 600;
-            color: #555;
-            font-style: italic;
-            text-transform: capitalize;
-            margin-left: 1rem;
-        }}
-        .timeslot-status.free {{
-            color: #188038;
-        }}
-        .timeslot-status.booked {{
-            color: #d13438;
-        }}
-        .timeslot-status.not-available {{
-            color: #999;
-        }}
-        .details {{
-            margin-top: 0.4rem;
-            color: #444;
-            white-space: pre-line;
-            display: none;
-            padding-left: 1rem;
-            font-size: 0.9rem;
-        }}
-        .timeslot-item.show-details .details {{
-            display: block;
-        }}
-        .toggle-btn {{
-            font-size: 0.8rem;
-            background: #0078d4;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            padding: 0.1em 0.5em;
-            cursor: pointer;
-            user-select: none;
+            justify-content: space-between;
             transition: background 0.2s ease;
-            margin-left: 1rem;
         }}
-        .toggle-btn:hover {{
-            background: #005a9e;
+
+        .timeslot-item:hover {{
+            background: var(--bg-secondary);
         }}
-        .custom-footer {{
-            margin: 3rem auto 0 auto;
-            max-width: 800px;
-            padding: 2rem 1rem 1.5rem 1rem;
-            text-align: center;
-            border-top: 1px solid #eee;
-            color: #888;
-            font-size: 1rem;
+
+        .timeslot-item:last-child {{
+            border-bottom: none;
         }}
-        .footer-link {{
-            color: #0078d4;
-            text-decoration: none;
+
+        .timeslot-info {{
+            flex: 1;
+        }}
+
+        .timeslot-time {{
+            font-size: 14px;
             font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
         }}
-        .footer-link:hover {{
-            text-decoration: underline;
-            color: #005a9e;
+
+        .timeslot-status {{
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }}
-        .footer-btn {{
-            display: inline-block;
-            margin-top: 1.2rem;
-            margin-bottom: 1.5rem;
-            padding: 0.7em 1.8em;
-            font-size: 0.90rem;
+
+        .timeslot-status.free {{
+            color: var(--accent-green);
+        }}
+
+        .timeslot-status.booked {{
+            color: var(--accent-red);
+        }}
+
+        .timeslot-status.not-available {{
+            color: var(--text-tertiary);
+        }}
+
+        .details-btn {{
+            padding: 4px 8px;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-small);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0;
+            transform: translateX(10px);
+        }}
+
+        .timeslot-item:hover .details-btn {{
+            opacity: 1;
+            transform: translateX(0);
+        }}
+
+        .details-btn:hover {{
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }}
+
+        /* Modal */
+        .modal-overlay {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 15, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }}
+
+        .modal-overlay.active {{
+            opacity: 1;
+            visibility: visible;
+        }}
+
+        .modal {{
+            background: var(--bg-primary);
+            border-radius: var(--radius-large);
+            box-shadow: var(--shadow-heavy);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }}
+
+        .modal-overlay.active .modal {{
+            transform: scale(1) translateY(0);
+        }}
+
+        .modal-header {{
+            padding: 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+
+        .modal-title {{
+            font-size: 18px;
             font-weight: 600;
-            border-radius: 4px;
-            background: #0078d4;
-            color: #fff;
-            text-decoration: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+            color: var(--text-primary);
+        }}
+
+        .modal-close {{
+            width: 32px;
+            height: 32px;
             border: none;
-            transition: background 0.2s, box-shadow 0.2s;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-small);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }}
-        .footer-btn:hover, .footer-btn:focus {{
-            background: #005a9e;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0,50,150,0.09);
+
+        .modal-close:hover {{
+            background: var(--accent-red-light);
+            color: var(--accent-red);
+        }}
+
+        .modal-content {{
+            padding: 24px;
+            overflow-y: auto;
+            max-height: calc(80vh - 120px);
+        }}
+
+        .booking-details {{
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            white-space: pre-line;
+        }}
+
+        /* Footer */
+        .footer {{
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-light);
+            padding: 32px 0;
+            text-align: center;
+        }}
+
+        .footer-content {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }}
+
+        .footer-badges {{
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }}
+
+        .footer-links {{
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }}
+
+        .footer-link {{
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }}
+
+        .footer-link:hover {{
+            color: var(--text-primary);
+        }}
+
+        .footer-text {{
+            color: var(--text-tertiary);
+            font-size: 12px;
+        }}
+
+        /* Responsive */
+        @media (max-width: 768px) {{
+            .container {{
+                padding: 0 16px;
+            }}
+
+            .header-content {{
+                flex-direction: column;
+                align-items: flex-start;
+            }}
+
+            .stats-grid {{
+                grid-template-columns: 1fr;
+            }}
+
+            .rooms-grid {{
+                grid-template-columns: 1fr;
+            }}
+
+            .filters-grid {{
+                grid-template-columns: 1fr;
+            }}
+
+            .footer-links {{
+                flex-direction: column;
+                gap: 12px;
+            }}
+        }}
+
+        /* Loading Animation */
+        .loading {{
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--border-light);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 1s ease-in-out infinite;
+        }}
+
+        @keyframes spin {{
+            to {{ transform: rotate(360deg); }}
+        }}
+
+        /* Hidden class */
+        .hidden {{
+            display: none !important;
         }}
     </style>
 </head>
 <body>
-    <div align="center">
-        <h1 class="meta-header">SMU FBS Room Availability</h1>
-        <div class="meta"><strong>Scrape Date:</strong> {scrape_date} | <strong>Time Range:</strong> {scrape_time_range}</div>
-        <div class="workflows">
-            <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg" alt="scrape workflow status" />
-            <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/generate.yml/badge.svg" alt="generate workflow status" />
-        </div>
-        <a class="footer-btn" href="https://github.com/gongahkia/sagasu-3/tree/main/backend/log/scraped_log.json" target="_blank" rel="noopener">
-            View the raw scraped_log.json
-        </a>
-    </div>
-    <ul class="room-list">
-    {''.join(f'''
-        <li class="room-item" id="room-{idx}">
-            <div class="room-summary" tabindex="0" role="button" aria-expanded="false" aria-controls="timeslots-{idx}">
-                <span class="room-name">{room['room']}</span>
-                <span class="room-status" id="room-status-{idx}">Loading...</span>
-            </div>
-            <ul class="timeslot-list" id="timeslots-{idx}">
-                {''.join(f'''
-                <li class="timeslot-item" id="room-{idx}-slot-{sidx}">
-                    <div class="timeslot-header" tabindex="0" role="button" aria-expanded="false" aria-controls="details-{idx}-{sidx}" onclick="toggleDetails(this)" onkeydown="if(event.key==='Enter'||event.key===' '){{event.preventDefault(); toggleDetails(this);}}">
-                        <div>
-                            <span class="timeslot-time">{slot['timeslot']}</span>
-                            <span class="timeslot-status {slot['status'].replace(' ', '-')}">{slot['status'].replace('not available due to timeslot', 'not available')}</span>
-                        </div>
-                        {f'<button class="toggle-btn" aria-label="Toggle Details">Details ▼</button>' if slot['details'].strip() else ''}
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">S3</div>
+                    <div>
+                        <div class="title">Sagasu 3</div>
+                        <div class="subtitle">SMU Room Availability Finder</div>
                     </div>
-                    {f'<div class="details" id="details-{idx}-{sidx}">{slot["details"]}</div>' if slot['details'].strip() else ''}
-                </li>
-                ''' for sidx, slot in enumerate(room['timeslots']))}
-            </ul>
-        </li>
-    ''' for idx, room in enumerate(rooms))}
-    </ul>
+                </div>
+                <div class="header-actions">
+                    <div class="status-badge">
+                        <div class="status-dot"></div>
+                        Live Data
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<script>
-    // Toggle room expansion (show/hide timeslots)
-    document.querySelectorAll('.room-summary').forEach(summary => {{
-        summary.addEventListener('click', () => {{
-            const roomItem = summary.parentElement;
-            const expanded = summary.getAttribute('aria-expanded') === 'true';
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card stat-free">
+                    <div class="stat-header">
+                        <div class="stat-title">Available Now</div>
+                        <div class="stat-icon">✓</div>
+                    </div>
+                    <div class="stat-value" id="free-rooms-count">{free_rooms}</div>
+                    <div class="stat-description">Rooms ready for booking</div>
+                </div>
+                <div class="stat-card stat-total">
+                    <div class="stat-header">
+                        <div class="stat-title">Total Rooms</div>
+                        <div class="stat-icon">🏢</div>
+                    </div>
+                    <div class="stat-value">{total_rooms}</div>
+                    <div class="stat-description">Project rooms monitored</div>
+                </div>
+                <div class="stat-card stat-updated">
+                    <div class="stat-header">
+                        <div class="stat-title">Last Updated</div>
+                        <div class="stat-icon">🕒</div>
+                    </div>
+                    <div class="stat-value" style="font-size: 16px; line-height: 1.2;">{last_updated}</div>
+                    <div class="stat-description">Data freshness</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            if (expanded) {{
-                roomItem.classList.remove('expanded');
-                summary.setAttribute('aria-expanded', 'false');
-            }} else {{
-                roomItem.classList.add('expanded');
-                summary.setAttribute('aria-expanded', 'true');
-            }}
-        }});
+    <!-- Filters Section -->
+    <section class="container">
+        <div class="filters-section">
+            <div class="filters-header">
+                <div class="filters-title">Filter Rooms</div>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All Rooms</button>
+                        <button class="filter-btn" data-filter="free">Available Now</button>
+                        <button class="filter-btn" data-filter="booked">Currently Booked</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Accessibility: toggle on Enter or Space keys
-        summary.addEventListener('keydown', (e) => {{
-            if (e.key === 'Enter' || e.key === ' ') {{
-                e.preventDefault();
-                summary.click();
-            }}
-        }});
-    }});
+    <!-- Rooms Section -->
+    <section class="rooms-section">
+        <div class="container">
+            <div class="rooms-header">
+                <div class="rooms-title">Room Availability</div>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">Grid</button>
+                    <button class="view-btn" data-view="list">List</button>
+                </div>
+            </div>
+            <div class="rooms-grid" id="rooms-container">
+                {''.join(f'''
+                <div class="room-card" data-room="{room['room']}" data-status="{('free' if room['currently_free'] else 'booked')}">
+                    <div class="room-header" onclick="toggleRoom(this)">
+                        <div class="room-info">
+                            <div class="room-name">{room['room']}</div>
+                            <div class="room-status" id="room-status-{idx}">
+                                <div class="status-indicator"></div>
+                                <span class="loading"></span>
+                            </div>
+                        </div>
+                        <button class="expand-btn">↓</button>
+                    </div>
+                    <div class="room-details">
+                        <div class="timeslots-list">
+                            {''.join(f'''
+                            <div class="timeslot-item" data-status="{slot['status'].replace(' ', '-')}">
+                                <div class="timeslot-info">
+                                    <div class="timeslot-time">{slot['timeslot']}</div>
+                                    <div class="timeslot-status {slot['status'].replace(' ', '-')}">
+                                        <div class="status-indicator"></div>
+                                        {slot['status'].replace('not available due to timeslot', 'not available')}
+                                    </div>
+                                </div>
+                                {f'<button class="details-btn" onclick="showDetails(event, `{slot["details"].replace("`", "\\`").replace("\\n", "\\\\n")}`)" data-room="{room["room"]}" data-time="{slot["timeslot"]}">Details</button>' if slot['details'].strip() else ''}
+                            </div>
+                            ''' for slot in room['timeslots'])}
+                        </div>
+                    </div>
+                </div>
+                ''' for idx, room in enumerate(rooms))}
+            </div>
+        </div>
+    </section>
 
-    // Toggle details in timeslot items
-    function toggleDetails(element) {{
-        const isExpanded = element.getAttribute('aria-expanded') === 'true';
-        if (isExpanded) {{
-            element.setAttribute('aria-expanded', 'false');
-            element.parentElement.classList.remove('show-details');
-        }} else {{
-            element.setAttribute('aria-expanded', 'true');
-            element.parentElement.classList.add('show-details');
-        }}
-    }}
-
-    // Determine current local datetime
-    const now = new Date();
-    // Format as YYYY-MM-DD for date comparison
-    const pad = n => n.toString().padStart(2, '0');
-    const todayStr = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-    // Function to convert HH:MM to minutes
-    function toMinutes(t) {{
-        const [h, m] = t.split(':').map(Number);
-        return h * 60 + m;
-    }}
-
-    // For each room, find current timeslot and update room status in summary
-    {''.join(f"""
-    (function() {{
-        const roomIdx = {idx};
-        const timeslots = Array.from(document.querySelectorAll('#timeslots-' + roomIdx + ' .timeslot-item')).map(li => {{
-            const timeStr = li.querySelector('.timeslot-time').textContent.trim();
-            const statusEl = li.querySelector('.timeslot-status');
-            return {{
-                timeslot: timeStr,
-                status: statusEl.textContent.trim(),
-            }};
-        }});
-
-        const roomStatusEl = document.getElementById('room-status-' + roomIdx);
-
-        let matchedSlot = null;
-        for (const slot of timeslots) {{
-            if (slot.timeslot === '23:59-24:00' || slot.timeslot === '00:00-24:00') continue; // ignore boundary slot
-            const [start, end] = slot.timeslot.split('-');
-            let startMin = toMinutes(start);
-            let endMin = toMinutes(end);
-            if (endMin === 0) endMin = 24 * 60;
-
-            if (startMin <= currentMinutes && currentMinutes < endMin) {{
-                matchedSlot = slot;
-                break;
-            }}
-        }}
-
-        if (matchedSlot === null) {{
-            roomStatusEl.textContent = 'No data';
-            roomStatusEl.className = 'room-status not-available';
-        }} else {{
-            roomStatusEl.textContent = matchedSlot.status;
-            const cls = matchedSlot.status.toLowerCase().replace(/ /g, '-');
-            roomStatusEl.className = 'room-status ' + cls;
-        }}
-    }})();
-    """ for idx, room in enumerate(rooms))}
-</script>
-
-</body>
-<footer class="custom-footer">
-    <div>
-        <a href="https://github.com/gongahkia/sagasu-3" class="footer-link">Sagasu 3</a> was made with <span style="color:#e25555;">&#10084;&#65039;</span> by <a href="https://gabrielongzm.com" class="footer-link">Gabriel Ong</a>.
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title">Booking Details</div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-content">
+                <div class="booking-details" id="modal-content"></div>
+            </div>
+        </div>
     </div>
-</footer>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-badges">
+                    <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/scrape.yml/badge.svg" alt="Scrape workflow status" />
+                    <img src="https://github.com/gongahkia/sagasu-3/actions/workflows/generate.yml/badge.svg" alt="Generate workflow status" />
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/gongahkia/sagasu-3" class="footer-link">GitHub Repository</a>
+                    <a href="https://github.com/gongahkia/sagasu-3/tree/main/backend/log/scraped_log.json" class="footer-link">Raw Data</a>
+                    <a href="https://gabrielongzm.com" class="footer-link">Gabriel Ong</a>
+                </div>
+                <div class="footer-text">
+                    Made with ❤️ for the SMU community
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global state
+        let currentFilter = 'all';
+        let currentView = 'grid';
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {{
+            updateRoomStatuses();
+            setupFilters();
+            setupViewToggle();
+            
+            // Update room statuses every 30 seconds
+            setInterval(updateRoomStatuses, 30000);
+        }});
+
+        // Function to convert HH:MM to minutes
+        function toMinutes(timeStr) {{
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }}
+
+        // Update room statuses based on current time
+        function updateRoomStatuses() {{
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            
+            document.querySelectorAll('.room-card').forEach((card, idx) => {{
+                const statusEl = card.querySelector('.room-status');
+                const timeslots = Array.from(card.querySelectorAll('.timeslot-item')).map(item => {{
+                    const timeStr = item.querySelector('.timeslot-time').textContent.trim();
+                    const statusText = item.querySelector('.timeslot-status').textContent.trim();
+                    return {{ timeslot: timeStr, status: statusText }};
+                }});
+
+                let currentSlot = null;
+                for (const slot of timeslots) {{
+                    if (slot.timeslot === '23:59-24:00' || slot.timeslot === '00:00-24:00') continue;
+                    
+                    const [start, end] = slot.timeslot.split('-');
+                    let startMin = toMinutes(start);
+                    let endMin = toMinutes(end);
+                    if (endMin === 0) endMin = 24 * 60;
+
+                    if (startMin <= currentMinutes && currentMinutes < endMin) {{
+                        currentSlot = slot;
+                        break;
+                    }}
+                }}
+
+                const loadingEl = statusEl.querySelector('.loading');
+                if (loadingEl) loadingEl.remove();
+
+                if (currentSlot) {{
+                    const statusText = statusEl.querySelector('span') || document.createElement('span');
+                    statusText.textContent = currentSlot.status;
+                    if (!statusEl.querySelector('span')) statusEl.appendChild(statusText);
+                    
+                    statusEl.className = 'room-status ' + currentSlot.status.toLowerCase().replace(/ /g, '-');
+                    card.dataset.status = currentSlot.status === 'free' ? 'free' : 'booked';
+                }} else {{
+                    const statusText = statusEl.querySelector('span') || document.createElement('span');
+                    statusText.textContent = 'No data';
+                    if (!statusEl.querySelector('span')) statusEl.appendChild(statusText);
+                    
+                    statusEl.className = 'room-status not-available';
+                    card.dataset.status = 'unknown';
+                }}
+            }});
+
+            // Update stats
+            updateStats();
+        }}
+
+        // Update statistics
+        function updateStats() {{
+            const freeCount = document.querySelectorAll('.room-card[data-status="free"]').length;
+            const freeCountEl = document.getElementById('free-rooms-count');
+            if (freeCountEl) {{
+                freeCountEl.textContent = freeCount;
+            }}
+        }}
+
+        // Setup filter functionality
+        function setupFilters() {{
+            document.querySelectorAll('.filter-btn').forEach(btn => {{
+                btn.addEventListener('click', function() {{
+                    // Update active state
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Apply filter
+                    currentFilter = this.dataset.filter;
+                    applyFilters();
+                }});
+            }});
+        }}
+
+        // Apply current filters
+        function applyFilters() {{
+            const rooms = document.querySelectorAll('.room-card');
+            
+            rooms.forEach(room => {{
+                const status = room.dataset.status;
+                let show = true;
+                
+                switch(currentFilter) {{
+                    case 'free':
+                        show = status === 'free';
+                        break;
+                    case 'booked':
+                        show = status === 'booked';
+                        break;
+                    case 'all':
+                    default:
+                        show = true;
+                        break;
+                }}
+                
+                room.style.display = show ? 'block' : 'none';
+            }});
+        }}
+
+        // Setup view toggle
+        function setupViewToggle() {{
+            document.querySelectorAll('.view-btn').forEach(btn => {{
+                btn.addEventListener('click', function() {{
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentView = this.dataset.view;
+                    applyView();
+                }});
+            }});
+        }}
+
+        // Apply current view
+        function applyView() {{
+            const container = document.getElementById('rooms-container');
+            if (currentView === 'list') {{
+                container.style.gridTemplateColumns = '1fr';
+            }} else {{
+                container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(380px, 1fr))';
+            }}
+        }}
+
+        // Toggle room expansion
+        function toggleRoom(headerEl) {{
+            const card = headerEl.closest('.room-card');
+            card.classList.toggle('expanded');
+        }}
+
+        // Show booking details modal
+        function showDetails(event, details, room, time) {{
+            event.stopPropagation();
+            
+            const modal = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content');
+            
+            title.textContent = `${{room}} - ${{time}}`;
+            content.textContent = details || 'No additional details available.';
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }}
+
+        // Close modal
+        function closeModal(event) {{
+            if (event && event.target !== event.currentTarget) return;
+            
+            const modal = document.getElementById('modal-overlay');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }}
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {{
+            if (e.key === 'Escape') {{
+                closeModal();
+            }}
+        }});
+    </script>
+</body>
 </html>
 """
     return html
@@ -393,7 +1121,7 @@ def main():
     data = load_scraped_log('../backend/log/scraped_log.json')
     html_content = generate_html(data)
     save_html_file(html_content)
-    print("LOG: Finished generating HTML file at index.html")
+    print("LOG: Finished generating dynamic HTML file at index.html")
 
 if __name__ == '__main__':
     main()
