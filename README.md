@@ -36,9 +36,18 @@ Enough has already been said. If you must know why `Sagasu 3` exists, see [here]
 
 ## Screenshot
 
+### Version 1
+
 <div align="center">
     <img src="./asset/reference/1.png" width="48%">
     <img src="./asset/reference/2.png" width="48%">
+</div>
+
+### Version 2
+
+<div align="center">
+    <img src="./asset/reference/3.png" width="48%">
+    <img src="./asset/reference/4.png" width="48%">
 </div>
 
 ## Usage
